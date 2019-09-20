@@ -1,16 +1,23 @@
-import React from 'react';
-import Header from './components/Header';
-import Nav from './components/Nav';
-import UserForm from './components/UserForm';
-import './App.css';
-import LoginForm from './components/Login';
+import React from "react";
+import { Route, Link } from "react-router-dom";
+
+import "./App.css";
+import Header from "./components/Header";
+import Nav from "./components/Nav";
+import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/Login";
 
 function App() {
   return (
     <div>
-      <UserForm />
+      <Link to="/">Home</Link>
+      {/* Adding a link to /register from the front page; later this could be moved into a navbar or elsewhere */}
+      <Link to="/register">Register</Link>
+      <Link to="/login">Login</Link>
 
-      <LoginForm />
+      {/* RegisterForm will display at paths containing "/register" */}
+      <Route path="/register" component={RegisterForm} />
+      <Route path="/login" component={LoginForm} />
     </div>
   );
 }
