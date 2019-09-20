@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Link } from "react-router-dom";
 
+import "./App.css";
 import Header from "./components/Header";
 import Nav from "./components/Nav";
 import RegisterForm from "./components/RegisterForm";
-import LoginForm from "./components/LoginForm";
-import "./App.css";
+import LoginForm from "./components/Login";
 
 function App() {
   return (
