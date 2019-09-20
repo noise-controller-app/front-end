@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Formik, { Form, Field, withFormik } from "formik";
+import { Form, Field, withFormik } from "formik";
+import { Redirect } from 'react-router-dom';
 import * as Yup from "yup";
 import styled from "styled-components";
 import axios from "axios";
@@ -39,11 +40,7 @@ const StyledSubmitButton = styled(Field)`
 `;
 
 function UserForm({ touched, errors }) {
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    // Do stuff
-  }, [user]);
+  const [ user, setUser ] = useState();
 
   return (
     //Basic form ready to take in a name, email, and password that we will
@@ -76,17 +73,24 @@ export default withFormik({
       name: name || "",
       email: email || "",
       password: password || "",
-      classroom: classroom || ""
+      classroom: classroom || "",
     };
   },
-  // This will send our UserForm data to the database.
 
-  // handleSubmit(values) => {
-  //     axios.post('', values)
-  //         .then((res) => {
-  //             console.log(res);
+  // This will send our UserForm data to the database.
+  // Then, it will redirect the user to a page for the Teachers unique user ID.
+  // At the time of writing this code, no POST endpoint has been declared.
+  
+  // handleSubmit(values) {
+  //     axios
+  //       .post('', values)
+  //       .then((res) => {
+  //           return <Redirect to={`/teacher/{:id}`} />
   //         })
-  // }
+  //       .catch((err) => {
+  //           alert('Error: {err.message}')
+  //         })
+  // },
 
   // Validation Schema controls what guidelines each input field needs.
   validationSchema: Yup.object().shape({
