@@ -34,6 +34,7 @@ const StyledSubmitButton = styled(Field) `
     height: 1.3rem;
     width: 30%;
     border: 2px solid black;
+    color: white;
     background-color: green;
 `
 
