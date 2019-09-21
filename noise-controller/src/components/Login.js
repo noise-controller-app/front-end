@@ -7,49 +7,60 @@ import styled from 'styled-components';
 
 const StyledForm = styled('Form')`
     color: green;
-    width: 60vw;
+    width: 30%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 4em auto;
+    margin: 5em auto;
     border: 4rem solid green;
     min-height: 45vh;
+
+    @media (max-width: 600px) {
+        padding: 1em;
+    }
 
 `;
 
 const StyledH1 = styled('h1')`
     font-size: 4rem;
-    margin: 0 auto;
+    font-weight: 900;
+    margin: 0 0.5rem;
     display: flex;
     justify-content: center;
 
     @media (max-width: 600px) {
-        font-size: 3.6rem;
-        margin: 0 2.5rem;
+        font-size: 2rem;
+        margin: 0 auto;
+        margin-top: 1rem;
     }
 `;
 
-const StyledH2 = styled('h1')`
-    font-size: 3.6rem;
-    margin-top: -0.5rem;
+const StyledH2 = styled('h2')`
+    font-size: 3rem;
+    font-weight: 600;
+    margin: -0.5rem 0.5rem 0 0.5rem;
+    display: flex;
+    justify-content: center;
 
     @media (max-width: 600px) {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 2.4rem;
+        font-size: 1.6rem;
         margin: 0 2.5rem;
+        margin-top: 1rem;
     }
 `;
 
 const StyledH3 = styled('h3')`
     font-size: 1.6rem;
     margin-top: 5rem;
+    font-weight: 500;
 
     @media (max-width: 600px) {
-        font-size: 1.8rem;
-        margin: 0 2.5rem;
+        font-size: 1.1rem;
+        margin: 0 auto;
     }
 `;
 
