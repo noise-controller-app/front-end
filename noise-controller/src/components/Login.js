@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Formik, { Form, Field, withFormik, } from 'formik';
+import { Form, Field, withFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
 import styled from 'styled-components';
 
 
-const StyledForm = styled('Form')`
+const StyledForm = styled(Form)`
     color: green;
+    background-color: OldLace;
     width: 30%;
     display: flex;
     flex-direction: column;
@@ -16,7 +17,7 @@ const StyledForm = styled('Form')`
     border: 4rem solid green;
     min-height: 45vh;
 
-    @media (max-width: 600px) {
+    @media only screen and (max-width: 992px) { 
         padding: 1em;
     }
 
@@ -29,7 +30,7 @@ const StyledH1 = styled('h1')`
     display: flex;
     justify-content: center;
 
-    @media (max-width: 600px) {
+    @media only screen and (max-width: 992px) {
         font-size: 2rem;
         margin: 0 auto;
         margin-top: 1rem;
@@ -43,7 +44,7 @@ const StyledH2 = styled('h2')`
     display: flex;
     justify-content: center;
 
-    @media (max-width: 600px) {
+    @media only screen and (max-width: 992px) {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -58,62 +59,89 @@ const StyledH3 = styled('h3')`
     margin-top: 5rem;
     font-weight: 500;
 
-    @media (max-width: 600px) {
+    @media only screen and (max-width: 992px) {
         font-size: 1.1rem;
         margin: 0 auto;
     }
 `;
 
+const Alert = styled('p')`
+  min-height: 25px;
+  width: 60%;
+  color: red;
+  font-weight: 600;
+  font-style: italic;
+`;
+
+const StyledField = styled(Field)`
+  height: 1.3rem;
+  width: 60%;
+  border: 2px solid green;
+  margin: 1rem auto;
+`;
+
+const StyledSubmitButton = styled(Field)`
+  height: 1.3rem;
+  width: 30%;
+  border: 2px solid black;
+  color: white;
+  background-color: green;
+  margin: 0.5rem auto;
+
+  @media only screen and (max-width: 992px) {
+    width: 60%;
+}
+`;
 
 function LoginForm({status, touched, errors}){
     const [ returnUser, setReturnUser ] = useState([]);
 
-    useEffect(() => {
-        if (status) {
-            setReturnUser([...returnUser, status])
-        }
-    }, [status])
+    // useEffect(() => {
+    //     if (status) {
+    //         setReturnUser([...returnUser, status])
+    //     }
+    // }, [status])
 
   return(
         <StyledForm id='login'>
-            <StyledH1>Welcome Back!</StyledH1>
+            <StyledH1>Welcome!</StyledH1>
             <StyledH2>Everything is fine.</StyledH2>
             <br />
             <StyledH3>Please sign in</StyledH3>
-            <div>
-                {errors.email && touched.email && <h3>{errors.email}</h3>}
-                <Field type='email' 
-                    autoComplete='username' 
+            <br />
+            
+            {errors.email && touched.email && <Alert>{errors.email}</Alert>}
+            <StyledField name='email' 
                     placeholder='Email' 
                 />
-            </div>
-            <div>
-                {touched.password && errors.password && <p>{errors.password}</p>}
-                <Field type='password' 
-                       autoComplete='current-password' 
-                       placeholder='Password' 
-                />
-            </div>
             
-            <Field type='submit' value='Sign In!' />
+            {errors.password && touched.password && <Alert>{errors.password}</Alert>}
+            <StyledField name='password'  
+                    placeholder='Password' 
+                />
+            
+            <StyledSubmitButton type='submit' 
+                    name='Sign In!' 
+                    placeholder="Sign In" 
+                />
         </StyledForm>
   )}
 
 
   export default withFormik({
-      mapPropsToValues: ({ email, password}) => {
+      mapPropsToValues: ({ email, password }) => {
           return {
             email: email || "",
             password: password || ""
-          }
+          };
       },
 
       // add axios request link for Jordan's API with handleSubmit
         
       validationSchema: Yup.object().shape({
           email: Yup.string()
-          .required('Your email is required to login'),
+          .required(' * Your email is required to login'),
           password: Yup.string()
-          .required('Password is required to login')
+          .required(' *Password is required to login')
         })
     })(LoginForm);
