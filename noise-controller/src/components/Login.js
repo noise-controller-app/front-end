@@ -7,22 +7,50 @@ import styled from 'styled-components';
 
 const StyledForm = styled('Form')`
     color: green;
-    width: 30%;
+    width: 60vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 4em auto;
-    border: 4em solid green;
-    min-height: 500px;
+    border: 4rem solid green;
+    min-height: 45vh;
+
 `;
 
 const StyledH1 = styled('h1')`
-    font-size: 4.8em;
+    font-size: 4rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+
+    @media (max-width: 600px) {
+        font-size: 3.6rem;
+        margin: 0 2.5rem;
+    }
 `;
 
-const StyledP = styled('p')`
-    font-size: 1.6em;
+const StyledH2 = styled('h1')`
+    font-size: 3.6rem;
+    margin-top: -0.5rem;
+
+    @media (max-width: 600px) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.4rem;
+        margin: 0 2.5rem;
+    }
+`;
+
+const StyledH3 = styled('h3')`
+    font-size: 1.6rem;
+    margin-top: 5rem;
+
+    @media (max-width: 600px) {
+        font-size: 1.8rem;
+        margin: 0 2.5rem;
+    }
 `;
 
 
@@ -38,9 +66,11 @@ function LoginForm({status, touched, errors}){
   return(
         <StyledForm id='login'>
             <StyledH1>Welcome Back!</StyledH1>
-            <StyledP>Please sign in</StyledP>
+            <StyledH2>Everything is fine.</StyledH2>
+            <br />
+            <StyledH3>Please sign in</StyledH3>
             <div>
-                {errors.email && touched.email && <p>{errors.email}</p>}
+                {errors.email && touched.email && <h3>{errors.email}</h3>}
                 <Field type='email' 
                     autoComplete='username' 
                     placeholder='Email' 
@@ -67,7 +97,7 @@ function LoginForm({status, touched, errors}){
           }
       },
 
-      // add axios request for Jordan's API with handleSubmit
+      // add axios request link for Jordan's API with handleSubmit
         
       validationSchema: Yup.object().shape({
           email: Yup.string()
