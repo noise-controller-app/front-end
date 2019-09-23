@@ -4,7 +4,6 @@ import axios from 'axios';
 import * as Yup from 'yup';
 import styled from 'styled-components';
 
-
 const StyledForm = styled(Form)`
     color: green;
     background-color: OldLace;
@@ -14,7 +13,7 @@ const StyledForm = styled(Form)`
     justify-content: center;
     align-items: center;
     margin: 5em auto;
-    border: 4rem solid green;
+    border: 3rem solid green;
     min-height: 45vh;
 
     @media only screen and (max-width: 992px) { 
@@ -142,6 +141,6 @@ function LoginForm({status, touched, errors}){
           email: Yup.string()
           .required(' * Your email is required to login'),
           password: Yup.string()
-          .required(' *Password is required to login')
+          .required(' * Password is required to login')
         })
     })(LoginForm);

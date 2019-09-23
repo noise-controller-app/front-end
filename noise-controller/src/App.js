@@ -4,20 +4,24 @@ import { Route, Link } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
 import Nav from "./components/Nav";
+import styled from 'styled-components';
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/Login";
+import TeacherPage from './components/TeacherPage';
+
+const Page = styled.div `
+  display: flex;
+`
 
 function App() {
   return (
     <div>
-      <Link to="/">Home</Link>
-      {/* Adding a link to /register from the front page; later this could be moved into a navbar or elsewhere */}
-      <Link to="/register">Register</Link>
-      <Link to="/login">Login</Link>
+      <Page>
+        <RegisterForm />
+        <LoginForm />
+      </Page>
 
-      {/* RegisterForm will display at paths containing "/register" */}
-      <Route path="/register" component={RegisterForm} />
-      <Route path="/login" component={LoginForm} />
+      <Route path='/teacher/:id' component={TeacherPage} />
     </div>
   );
 }
