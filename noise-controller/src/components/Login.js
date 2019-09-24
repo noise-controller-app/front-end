@@ -147,13 +147,9 @@ function LoginForm({ status, touched, errors }){
         // add axios request link for Jordan's API with handleSubmit
       handleSubmit(values, { setStatus, resetForm, setSubmitting }) {
           axios
-            .get(' https://voicecontrollerbackendapi.herokuapp.com/api/teachers/1')
+            .get(' https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login')
               .then((response) => {
                   console.log(response);
-                  setStatus(response.data)
-                  resetForm()
-                  setSubmitting(false)
-                //   return <Redirect to='/teacher/:id' />
               })
               .catch((err) => {
                   console.log('Login Error: ', err);
