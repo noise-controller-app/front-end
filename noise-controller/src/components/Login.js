@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Field, withFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledForm = styled(Form)`
@@ -92,15 +93,16 @@ const StyledSubmitButton = styled(Field)`
 }
 `;
 
-function LoginForm({status, touched, errors}){
-    const [ returnUser, setReturnUser ] = useState([]);
+function LoginForm({ status, touched, errors }){
+    const [ returnUser, setReturnUser ] = useState([
+        { name: 'Amber Pittman', email: 'amber@lambdaschool.org' }, 
+        { name: 'Cole', email: 'cole@lambdaschool.org' } 
+    ]);
 
-    // useEffect(() => {
-    //     if (status) {
-    //         setReturnUser([...returnUser, status])
-    //     }
-    // }, [status])
-
+    useEffect(() => {
+        if (status) setReturnUser((existingUser) => [...existingUser, status])
+    }, [status])
+   
   return(
         <StyledForm id='login'>
             <StyledH1>Welcome!</StyledH1>
@@ -135,12 +137,27 @@ function LoginForm({status, touched, errors}){
           };
       },
 
-      // add axios request link for Jordan's API with handleSubmit
-        
       validationSchema: Yup.object().shape({
           email: Yup.string()
-          .required(' * Your email is required to login'),
+          .required(' * Your User Name is required to login'),
           password: Yup.string()
           .required(' * Password is required to login')
-        })
+        }),
+
+        // add axios request link for Jordan's API with handleSubmit
+      handleSubmit(values, { setStatus, resetForm, setSubmitting }) {
+          axios
+            .post('https://voicecontrollerbackendapi.herokuapp.com/api/teachers')
+              .then((response) => {
+                  console.log(response);
+                  setStatus(response.data)
+                  resetForm()
+                  setSubmitting(false)
+                //   return <Redirect to='/teacher/:id' />
+              })
+              .catch((err) => {
+                  console.log('Login Error: ', err);
+                  alert('Login Error: {err.message}')
+              });
+          } 
     })(LoginForm);
