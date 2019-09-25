@@ -14,128 +14,117 @@ const Screen = styled.div`
   background-size: cover;
 `;
 
+const StyledEmoji = styled.span`
+  position: absolute;
+  left: ${props => props.homePosition[0]};
+  top: ${props => props.homePosition[1]};
+  font-size: 15vh;
+`;
+
 function AnimalScreen() {
   const [animals, updateAnimals] = useState([
     {
       label: "sheep",
       symbol: "🐑",
       visible: true,
-      homePosition: ["calc(20% - 7.5vh)", "calc(15% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(20% - 7.5vh)", "calc(15% - 7.5vh)"]
     },
     {
       label: "mouse",
       symbol: "🐭",
       visible: true,
-      homePosition: ["calc(50% - 7.5vh)", "calc(15% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(50% - 7.5vh)", "calc(15% - 7.5vh)"]
     },
     {
       label: "dog",
       symbol: "🐶",
       visible: true,
-      homePosition: ["calc(80% - 7.5vh)", "calc(15% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(80% - 7.5vh)", "calc(15% - 7.5vh)"]
     },
     {
       label: "pig face",
       symbol: "🐷",
       visible: true,
-      homePosition: ["calc(20% - 7.5vh)", "calc(37.5% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(20% - 7.5vh)", "calc(37.5% - 7.5vh)"]
     },
     // {
     //   label: "snail",
     //   symbol: "🐌",
     //   visible: true,
-    // homePosition: [0, 0],hiddenPosition: ['50%', '-100px'],, },
+    // homePosition: [0, 0]
     {
-      label: "peacock",
-      symbol: "🦚",
+      label: "duck",
+      symbol: "🦆",
       visible: true,
-      homePosition: ["calc(50% - 7.5vh)", "calc(37.5% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(50% - 7.5vh)", "calc(37.5% - 7.5vh)"]
     },
     {
       label: "lion",
       symbol: "🦁",
       visible: true,
-      homePosition: ["calc(80% - 7.5vh)", "calc(37.5% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(80% - 7.5vh)", "calc(37.5% - 7.5vh)"]
     },
     {
       label: "bear",
       symbol: "🐻",
       visible: true,
-      homePosition: ["calc(20% - 7.5vh)", "calc(62.5% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(20% - 7.5vh)", "calc(62.5% - 7.5vh)"]
     },
     {
       label: "panda",
       symbol: "🐼",
       visible: true,
-      homePosition: ["calc(50% - 7.5vh)", "calc(62.5% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(50% - 7.5vh)", "calc(62.5% - 7.5vh)"]
     },
     {
       label: "cow",
       symbol: "🐮",
       visible: true,
-      homePosition: ["calc(80% - 7.5vh)", "calc(62.5% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(80% - 7.5vh)", "calc(62.5% - 7.5vh)"]
     },
     {
       label: "tiger",
       symbol: "🐯",
       visible: true,
-      homePosition: ["calc(20% - 7.5vh)", "calc(85% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(20% - 7.5vh)", "calc(85% - 7.5vh)"]
     },
     {
       label: "rabbit",
       symbol: "🐰",
       visible: true,
-      homePosition: ["calc(50% - 7.5vh)", "calc(85% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(50% - 7.5vh)", "calc(85% - 7.5vh)"]
     },
     {
       label: "unicorn",
       symbol: "🦄",
       visible: true,
-      homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"],
-      hiddenPosition: ["50%", "-100px"]
+      homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"]
     }
   ]);
 
   const Emoji = props => (
-    <span
+    <StyledEmoji
       className="emoji"
       role="img"
       aria-label={props.label ? props.label : ""}
       aria-hidden={props.label ? "false" : "true"}
-      style={{
-        visibility: props.visible ? "visible" : "hidden",
-        position: "absolute",
-        left: props.visible ? props.homePosition[0] : props.hiddenPosition[0],
-        top: props.visible ? props.homePosition[1] : props.hiddenPosition[1],
-        fontSize: "15vh"
-      }}
+      homePosition={props.homePosition}
     >
-      {" "}
       {props.symbol}
-    </span>
+    </StyledEmoji>
   );
 
   return (
     <Screen>
-      {animals.map(animal => (
-        <Emoji
-          label={animal.label}
-          symbol={animal.symbol}
-          visible={animal.visible}
-          homePosition={animal.homePosition}
-        />
-      ))}
+      {animals
+        .filter(animal => animal.visible)
+        .map(animal => (
+          <Emoji
+            label={animal.label}
+            symbol={animal.symbol}
+            homePosition={animal.homePosition}
+          />
+        ))}
     </Screen>
   );
 }
