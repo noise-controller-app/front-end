@@ -1,5 +1,6 @@
 import React from 'react';
 import AnimalScreen from './AnimalScreen';
+import Timer from './Timer';
 import styled from 'styled-components';
 
 const Page = styled.section `
@@ -32,6 +33,7 @@ function TeacherPage(props) {
 
             {/* This will render the screen that shows animals bouncing around or what ever we decide once we are able to make it work. */}
             <AnimalScreen />
+            <Timer minute={props.minute} second={props.minute} toggleButton={props.toggleButton} />
         </Page>
     )
 }
