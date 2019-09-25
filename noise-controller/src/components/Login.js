@@ -111,9 +111,9 @@ function LoginForm({ status, touched, errors }){
             <StyledH3>Please sign in</StyledH3>
             <br />
             
-            {errors.email && touched.email && <Alert>{errors.email}</Alert>}
-            <StyledField name='email' 
-                    placeholder='Email' 
+            {errors.username && touched.username && <Alert>{errors.username}</Alert>}
+            <StyledField name='username' 
+                    placeholder='Username' 
                 />
             
             {errors.password && touched.password && <Alert>{errors.password}</Alert>}
