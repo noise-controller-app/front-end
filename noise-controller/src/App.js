@@ -3,6 +3,7 @@ import { Route, Link } from "react-router-dom";
 import "./App.css";
 import TeacherPage from "./components/TeacherPage";
 import Forms from "./components/Forms";
+import AnimalScreen from "./components/AnimalScreen";
 
 function App() {
   const [second, setSecond] = useState(0);
@@ -59,6 +60,7 @@ function App() {
         toggleButton={toggleButton}
       />
       <Route path="/teacher/:id" component={TeacherPage} />
+      {/* <Route path='/teacher/:id' component={TeacherPage} /> */}
     </div>
   );
 }

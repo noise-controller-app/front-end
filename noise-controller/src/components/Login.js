@@ -95,6 +95,15 @@ const LogInUrl =
   "https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN";
 
 function LoginForm({ status, touched, errors }) {
+  const [returnUser, setReturnUser] = useState([
+    { name: "Amber Pittman", email: "amber@lambdaschool.org" },
+    { name: "Cole", email: "cole@lambdaschool.org" }
+  ]);
+
+  useEffect(() => {
+    if (status) setReturnUser(existingUser => [...existingUser, status]);
+  }, [status]);
+
   return (
     <StyledForm id="login">
       <StyledH1>Welcome!</StyledH1>
@@ -134,9 +143,23 @@ export default withFormik({
   },
 
   // add axios request link for Jordan's API with handleSubmit
-
   validationSchema: Yup.object().shape({
-    username: Yup.string().required(" * Your email is required to login"),
+    username: Yup.string().required(" * Your User Name is required to login"),
     password: Yup.string().required(" * Password is required to login")
-  })
+  }),
+
+  // add axios request link for Jordan's API with handleSubmit
+  handleSubmit() {
+    axios
+      .get(
+        " https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login"
+      )
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log("Login Error: ", err);
+        alert("Login Error: {err.message}");
+      });
+  }
 })(LoginForm);
