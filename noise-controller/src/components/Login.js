@@ -17,11 +17,9 @@ const StyledForm = styled(Form)`
     margin: 5em auto;
     border: 3rem solid green;
     min-height: 45vh;
-
     @media only screen and (max-width: 992px) { 
         padding: 1em;
     }
-
 `;
 
 const StyledH1 = styled('h1')`
@@ -30,7 +28,6 @@ const StyledH1 = styled('h1')`
     margin: 0 0.5rem;
     display: flex;
     justify-content: center;
-
     @media only screen and (max-width: 992px) {
         font-size: 2rem;
         margin: 0 auto;
@@ -44,7 +41,6 @@ const StyledH2 = styled('h2')`
     margin: -0.5rem 0.5rem 0 0.5rem;
     display: flex;
     justify-content: center;
-
     @media only screen and (max-width: 992px) {
         display: flex;
         justify-content: center;
@@ -59,7 +55,6 @@ const StyledH3 = styled('h3')`
     font-size: 1.6rem;
     margin-top: 5rem;
     font-weight: 500;
-
     @media only screen and (max-width: 992px) {
         font-size: 1.1rem;
         margin: 0 auto;
@@ -88,23 +83,22 @@ const StyledSubmitButton = styled(Field)`
   color: white;
   background-color: green;
   margin: 0.5rem auto;
-
   @media only screen and (max-width: 992px) {
     width: 60%;
 }
 `;
 
-const LoginURL = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN';
+const LoginUrl = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN';
 
 function LoginForm({ status, touched, errors }){
-    // const [ returnUser, setReturnUser ] = useState([
+    const [ returnUser, setReturnUser ] = useState([
     //     { name: 'Amber Pittman', email: 'amber@lambdaschool.org' }, 
     //     { name: 'Cole', email: 'cole@lambdaschool.org' } 
-    // ]);
+    ]);
 
-    // useEffect(() => {
-    //     if (status) setReturnUser((existingUser) => [...existingUser, status])
-    // }, [status])
+    useEffect(() => {
+        if (status) setReturnUser((existingUser) => [...existingUser, status])
+    }, [status])
    
   return(
         <StyledForm id='login'>
@@ -126,8 +120,8 @@ function LoginForm({ status, touched, errors }){
             
             <StyledSubmitButton type='submit' 
                     name='Sign In!' 
-                    placeholder="Sign In" 
-                    className='button'
+                    placeholder='Sign In'
+                    className='button' 
                     onClick={ <Redirect to={TeacherPage} /> }
                 />
         </StyledForm>
@@ -135,17 +129,17 @@ function LoginForm({ status, touched, errors }){
 
 
   export default withFormik({
-      mapPropsToValues: ( { username, password }) => {
+      mapPropsToValues: ({ username, password }) => {
           return {
             username: username || "",
             password: password || ""
           };
       },
 
-    // add axios request link for Jordan's API with handleSubmit
-    handleSubmit(values) {
+      // add axios request link for Jordan's API with handleSubmit
+      handleSubmit() {
         axios
-            .post(LoginURL, values)
+          .get(' https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login')
             .then((response) => {
                 console.log(response);
             })
@@ -153,8 +147,9 @@ function LoginForm({ status, touched, errors }){
                 console.log('Login Error: ', err);
                 alert('Login Error: {err.message}')
             });
-        }, 
+        },
 
+      
       validationSchema: Yup.object().shape({
         username: Yup.string()
           .required(' * Your User Name is required to login'),
@@ -162,5 +157,5 @@ function LoginForm({ status, touched, errors }){
           .required(' * Password is required to login')
         }),
 
-      
+        
     })(LoginForm);

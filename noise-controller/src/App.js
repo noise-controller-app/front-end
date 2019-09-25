@@ -51,16 +51,6 @@ function App() {
 
   return (
     <div>
-<<<<<<< HEAD
-      <Page>
-        <RegisterForm />
-        <LoginForm />
-      </Page>
-
-      <Route path='/teacher/:id' component={TeacherPage} />
-
-      {/* <AnimalScreen /> */}
-=======
       {/* {(user === undefined) ? <Forms />
         : <TeacherPage timer={clock} />
       } */}
@@ -68,7 +58,6 @@ function App() {
       <TeacherPage minute={minute} second={second} toggleButton={toggleButton} />
       <Route path='/teacher/:id' component={TeacherPage} />
       {/* <Route path='/teacher/:id' component={TeacherPage} /> */}
->>>>>>> 8fa668970663c6acc762069ad1eb85ee330980d6
     </div>
   );
 }
