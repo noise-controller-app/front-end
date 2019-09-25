@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/Login";
 import TeacherPage from './components/TeacherPage';
+import AnimalScreen from './components/AnimalScreen';
 
 const Page = styled.div `
   display: flex;
@@ -22,6 +23,8 @@ function App() {
       </Page>
 
       {/* <Route path='/teacher/:id' component={TeacherPage} /> */}
+
+      <AnimalScreen />
     </div>
   );
 }
