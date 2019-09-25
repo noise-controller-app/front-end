@@ -42,10 +42,22 @@ const slideHome = homePosition => keyframes`
   }
 `;
 
+const bounce = keyframes`
+  0%   { transform: scale(1,1)      translateY(0); }
+  10%  { transform: scale(1.1,.9)   translateY(0); }
+  30%  { transform: scale(.9,1.1)   translateY(-50px); }
+  50%  { transform: scale(1.05,.95) translateY(0); }
+  57%  { transform: scale(1,1)      translateY(-7px); }
+  64%  { transform: scale(1,1)      translateY(0); }
+  100% { transform: scale(1,1)      translateY(0); }
+`;
+
 const StyledEmoji = styled.span`
   position: absolute;
   animation: ${fadeIn} 2s linear, ${props =>
-  slideHome(props.homePosition)} 1s ease 2s;
+  slideHome(
+    props.homePosition
+  )} 1s ease 2s, ${bounce} 2s cubic-bezier(0.280, 0.840, 0.420, 1) 2s infinite;
   animation-fill-mode: forwards;
   // left: ${props => props.homePosition[0]};
   // top: ${props => props.homePosition[1]};
