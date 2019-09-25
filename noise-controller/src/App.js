@@ -22,9 +22,9 @@ function App() {
         <LoginForm />
       </Page>
 
-      {/* <Route path='/teacher/:id' component={TeacherPage} /> */}
+      <Route path='/teacher/:id' component={TeacherPage} />
 
-      <AnimalScreen />
+      {/* <AnimalScreen /> */}
     </div>
   );
 }
