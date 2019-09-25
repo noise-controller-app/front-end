@@ -92,15 +92,9 @@ const StyledSubmitButton = styled(Field)`
 }
 `;
 
+const LogInUrl = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN';
+
 function LoginForm({status, touched, errors}){
-    const [ returnUser, setReturnUser ] = useState([]);
-
-    // useEffect(() => {
-    //     if (status) {
-    //         setReturnUser([...returnUser, status])
-    //     }
-    // }, [status])
-
   return(
         <StyledForm id='login'>
             <StyledH1>Welcome!</StyledH1>
@@ -109,9 +103,9 @@ function LoginForm({status, touched, errors}){
             <StyledH3>Please sign in</StyledH3>
             <br />
             
-            {errors.email && touched.email && <Alert>{errors.email}</Alert>}
-            <StyledField name='email' 
-                    placeholder='Email' 
+            {errors.username && touched.username && <Alert>{errors.username}</Alert>}
+            <StyledField name='username' 
+                    placeholder='Username' 
                 />
             
             {errors.password && touched.password && <Alert>{errors.password}</Alert>}
@@ -128,17 +122,27 @@ function LoginForm({status, touched, errors}){
 
 
   export default withFormik({
-      mapPropsToValues: ({ email, password }) => {
+      mapPropsToValues: ({ username, password }) => {
           return {
-            email: email || "",
+            username: username || "",
             password: password || ""
           };
+      },
+
+      handleSubmit(values) {
+        axios.post(LogInUrl, values)
+        .then((res) => {
+            console.log(res);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
       },
 
       // add axios request link for Jordan's API with handleSubmit
         
       validationSchema: Yup.object().shape({
-          email: Yup.string()
+          username: Yup.string()
           .required(' * Your email is required to login'),
           password: Yup.string()
           .required(' * Password is required to login')
