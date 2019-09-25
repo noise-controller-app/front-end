@@ -5,6 +5,7 @@ import styled from "styled-components";
 //Just wanted to have something coming on the screen with some basic styled.
 
 const Screen = styled.div`
+  position: relative;
   height: 80vh;
   width: 60%;
   border: 5px solid green;
@@ -18,67 +19,91 @@ function AnimalScreen() {
     {
       label: "sheep",
       symbol: "🐑",
-      visible: true
+      visible: true,
+      homePosition: ["calc(20% - 7.5vh)", "calc(15% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "mouse",
       symbol: "🐭",
-      visible: true
+      visible: true,
+      homePosition: ["calc(50% - 7.5vh)", "calc(15% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "dog",
       symbol: "🐶",
-      visible: true
+      visible: true,
+      homePosition: ["calc(80% - 7.5vh)", "calc(15% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "pig face",
       symbol: "🐷",
-      visible: true
+      visible: true,
+      homePosition: ["calc(20% - 7.5vh)", "calc(37.5% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
-    {
-      label: "snail",
-      symbol: "🐌",
-      visible: true
-    },
+    // {
+    //   label: "snail",
+    //   symbol: "🐌",
+    //   visible: true,
+    // homePosition: [0, 0],hiddenPosition: ['50%', '-100px'],, },
     {
       label: "peacock",
       symbol: "🦚",
-      visible: true
+      visible: true,
+      homePosition: ["calc(50% - 7.5vh)", "calc(37.5% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "lion",
       symbol: "🦁",
-      visible: true
+      visible: true,
+      homePosition: ["calc(80% - 7.5vh)", "calc(37.5% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "bear",
       symbol: "🐻",
-      visible: true
+      visible: true,
+      homePosition: ["calc(20% - 7.5vh)", "calc(62.5% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "panda",
       symbol: "🐼",
-      visible: true
+      visible: true,
+      homePosition: ["calc(50% - 7.5vh)", "calc(62.5% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "cow",
       symbol: "🐮",
-      visible: true
+      visible: true,
+      homePosition: ["calc(80% - 7.5vh)", "calc(62.5% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "tiger",
       symbol: "🐯",
-      visible: true
+      visible: true,
+      homePosition: ["calc(20% - 7.5vh)", "calc(85% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "rabbit",
       symbol: "🐰",
-      visible: true
+      visible: true,
+      homePosition: ["calc(50% - 7.5vh)", "calc(85% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     },
     {
       label: "unicorn",
       symbol: "🦄",
-      visible: true
+      visible: true,
+      homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"],
+      hiddenPosition: ["50%", "-100px"]
     }
   ]);
 
@@ -88,6 +113,13 @@ function AnimalScreen() {
       role="img"
       aria-label={props.label ? props.label : ""}
       aria-hidden={props.label ? "false" : "true"}
+      style={{
+        visibility: props.visible ? "visible" : "hidden",
+        position: "absolute",
+        left: props.visible ? props.homePosition[0] : props.hiddenPosition[0],
+        top: props.visible ? props.homePosition[1] : props.hiddenPosition[1],
+        fontSize: "15vh"
+      }}
     >
       {" "}
       {props.symbol}
@@ -96,12 +128,12 @@ function AnimalScreen() {
 
   return (
     <Screen>
-      This is the Animal Screen Component!
       {animals.map(animal => (
         <Emoji
           label={animal.label}
           symbol={animal.symbol}
           visible={animal.visible}
+          homePosition={animal.homePosition}
         />
       ))}
     </Screen>
