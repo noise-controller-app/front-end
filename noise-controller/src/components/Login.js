@@ -130,22 +130,22 @@ function LoginForm({ status, touched, errors }){
 
 
   export default withFormik({
-      mapPropsToValues: ({ email, password }) => {
+      mapPropsToValues: ({ username, password }) => {
           return {
-            email: email || "",
+            username: username || "",
             password: password || ""
           };
       },
 
       validationSchema: Yup.object().shape({
-          email: Yup.string()
+        username: Yup.string()
           .required(' * Your User Name is required to login'),
           password: Yup.string()
           .required(' * Password is required to login')
         }),
 
         // add axios request link for Jordan's API with handleSubmit
-      handleSubmit(values, { setStatus, resetForm, setSubmitting }) {
+      handleSubmit() {
           axios
             .get(' https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login')
               .then((response) => {
