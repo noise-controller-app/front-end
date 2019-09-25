@@ -3,7 +3,7 @@ import { Form, Field, withFormik } from "formik";
 import { Redirect } from 'react-router-dom';
 import * as Yup from "yup";
 import styled from "styled-components";
-import axios from "axios";
+import * as axios from "axios";
 
 const StyledForm = styled(Form)`
     color: green;
@@ -82,16 +82,21 @@ const StyledSubmitButton = styled(Field)`
 }
 `;
 
+const RegisterEndpoint = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/REGISTER ';
+
 function UserForm({ touched, errors }) {
   return (
-    //Basic form ready to take in a name, email, and password that we will
+    // Basic form ready to take in a name, email, and password that we will
     // later send to an API in the form fo a POST request.
       <StyledForm>
         <StyledH1>New User?</StyledH1>
         <StyledH2>Sign up is easy!</StyledH2>
 
-        {errors.name && touched.name && <Alert>{errors.name}</Alert>}
-        <StyledField name="name" placeholder="Name" />
+        {errors.username && touched.username && <Alert>{errors.username}</Alert>}
+        <StyledField name="username" placeholder="Name" />
+
+        {errors.teacher_name && touched.teacher_name && <Alert>{errors.teacher_name}</Alert>}
+        <StyledField name="teacher_name" placeholder="What do your kids call you?" />
 
         {errors.email && touched.email && <Alert>{errors.email}</Alert>}
         <StyledField name="email" placeholder="Email" />
@@ -99,10 +104,8 @@ function UserForm({ touched, errors }) {
         {errors.password && touched.password && <Alert>{errors.password}</Alert>}
         <StyledField name="password" placeholder="Password" />
 
-        {errors.classroom && touched.classroom && (
-          <Alert>{errors.classroom}</Alert>
-        )}
-        <StyledField name="classroom" placeholder="Classroom Name" />
+        {/* {errors.classroom && touched.classroom &&<Alert>{errors.classroom}</Alert>}
+        <StyledField name="classroom" placeholder="Classroom Name" /> */}
 
         <StyledSubmitButton type="submit" name="Submit" placeholder="Submit" />
       </StyledForm>
@@ -110,12 +113,13 @@ function UserForm({ touched, errors }) {
 }
 
 export default withFormik({
-  mapPropsToValues: ({ name, email, password, classroom }) => {
+  mapPropsToValues: ({ username, email, teacher_name, password, classroom }) => {
     return {
-      name: name || "",
-      email: email || "",
-      password: password || "",
-      classroom: classroom || "",
+      username: username || '',
+      email: email || '',
+      teacher_name: teacher_name || '',
+      password: password || ''
+      // classroom: classroom || '',
     };
   },
 
@@ -124,20 +128,19 @@ export default withFormik({
   // At the time of writing this code, no POST endpoint has been declared.
   
   handleSubmit(values) {
-      axios
-        .post('', values)
-        .get('API URL')
-          .then((res) => {
-            return <Redirect to='/teacher/${id}' />
-          })
-        .catch((err) => {
-            alert('Error: {err.message}')
-          })
+      axios.post(RegisterEndpoint, values)
+      .then((res) => {
+        console.log('Sent!');
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   },
 
   // Validation Schema controls what guidelines each input field needs.
   validationSchema: Yup.object().shape({
-    name: Yup.string()
+    username: Yup.string()
       .min(6)
       .required(
         "We would love to get to know you better. Maybe just start with your name? :)"
@@ -147,11 +150,12 @@ export default withFormik({
       .required(
         "How are we supposed to send you our newsletter without your email?"
       ),
+    teacher_name: Yup.string().required('Alias required.'),
     password: Yup.string()
       .min(7)
       .required("Password required."),
-    classroom: Yup.string().required(
-      "C'mon, you're a teacher... You don't have a classroom?"
-    )
+    // classroom: Yup.string().required(
+    //   "C'mon, you're a teacher... You don't have a classroom?"
+    // )
   })
 })(UserForm);

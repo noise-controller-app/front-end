@@ -93,6 +93,8 @@ const StyledSubmitButton = styled(Field)`
 }
 `;
 
+const LogInUrl = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN';
+
 function LoginForm({ status, touched, errors }){
     const [ returnUser, setReturnUser ] = useState([
         { name: 'Amber Pittman', email: 'amber@lambdaschool.org' }, 
@@ -137,6 +139,17 @@ function LoginForm({ status, touched, errors }){
           };
       },
 
+      handleSubmit(values) {
+        axios.post(LogInUrl, values)
+        .then((res) => {
+            console.log(res);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+      },
+
+      // add axios request link for Jordan's API with handleSubmit
       validationSchema: Yup.object().shape({
         username: Yup.string()
           .required(' * Your User Name is required to login'),
