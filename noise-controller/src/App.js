@@ -3,6 +3,7 @@ import { Route, Link } from "react-router-dom";
 import "./App.css";
 import TeacherPage from './components/TeacherPage';
 import Forms from './components/Forms';
+import AnimalScreen from './components/AnimalScreen';
 
 
 function App() {
@@ -53,9 +54,10 @@ function App() {
       {/* {(user === undefined) ? <Forms />
         : <TeacherPage timer={clock} />
       } */}
-
+    
       <TeacherPage minute={minute} second={second} toggleButton={toggleButton} />
       <Route path='/teacher/:id' component={TeacherPage} />
+      {/* <Route path='/teacher/:id' component={TeacherPage} /> */}
     </div>
   );
 }
