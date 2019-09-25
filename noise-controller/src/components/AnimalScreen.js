@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 //To see what the animal screen looks like so far, render this component to App.js.
 //Just wanted to have something coming on the screen with some basic styled.
@@ -14,11 +14,42 @@ const Screen = styled.div`
   background-size: cover;
 `;
 
+const fadeIn = keyframes`
+  0%   {
+    opacity: 0;
+    font-size: 24rem;
+    top: calc(50% - 12rem);
+    left: calc(50% - 12rem);
+  }
+  100% {
+    opacity: 1;
+    font-size: 24rem;
+    top: calc(50% - 12rem);
+    left: calc(50% - 12rem);
+  }
+`;
+
+const slideHome = homePosition => keyframes`
+  0%   {
+    font-size: 24rem;
+    top: calc(50% - 12rem);
+    left: calc(50% - 12rem);
+  }
+  100% {
+    font-size: 15vh;
+    left: ${homePosition[0]};
+    top: ${homePosition[1]};
+  }
+`;
+
 const StyledEmoji = styled.span`
   position: absolute;
-  left: ${props => props.homePosition[0]};
-  top: ${props => props.homePosition[1]};
-  font-size: 15vh;
+  animation: ${fadeIn} 2s linear, ${props =>
+  slideHome(props.homePosition)} 1s ease 2s;
+  animation-fill-mode: forwards;
+  // left: ${props => props.homePosition[0]};
+  // top: ${props => props.homePosition[1]};
+  // font-size: 15vh;
 `;
 
 function AnimalScreen() {
