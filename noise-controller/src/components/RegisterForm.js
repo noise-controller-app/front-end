@@ -146,8 +146,8 @@ export default withFormik({
       .post(RegisterEndpoint, values)
       .then(res => {
         alert("Registered! Please log in now");
-        console.log("Sent!");
-        console.log(res);
+        // console.log("Sent!");
+        // console.log(res);
       })
       .catch(err => {
         console.log(err);
