@@ -110,7 +110,7 @@ function LoginForm(props) {
       <StyledField name="username" placeholder="Username" />
 
       {errors.password && touched.password && <Alert>{errors.password}</Alert>}
-      <StyledField name="password" placeholder="Password" />
+      <StyledField type="password" name="password" placeholder="Password" />
 
       <StyledSubmitButton
         type="submit"
