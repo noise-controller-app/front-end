@@ -220,6 +220,7 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
           setIsActive={setIsActive}
           visible={visible}
           setVisible={setVisible}
+          mic_sensitivity={mic_sensitivity}
           animal_change_time={animal_change_time}
           scattered={scattering}
           sendEmScattering={sendEmScattering}
