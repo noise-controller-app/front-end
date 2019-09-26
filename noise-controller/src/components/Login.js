@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Field, withFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledForm = styled(Form)`
@@ -93,6 +94,7 @@ const StyledSubmitButton = styled(Field)`
 
 const LogInUrl = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN';
 
+<<<<<<< HEAD
 function LoginForm({status, touched, errors, ...props}){
     const handleSubmit = (event, values) => {
         console.log(values);
@@ -104,6 +106,20 @@ function LoginForm({status, touched, errors, ...props}){
 
     return(
         <StyledForm id='login' >
+=======
+function LoginForm({ status, touched, errors }){
+    const [ returnUser, setReturnUser ] = useState([
+        { name: 'Amber Pittman', email: 'amber@lambdaschool.org' }, 
+        { name: 'Cole', email: 'cole@lambdaschool.org' } 
+    ]);
+
+    useEffect(() => {
+        if (status) setReturnUser((existingUser) => [...existingUser, status])
+    }, [status])
+   
+  return(
+        <StyledForm id='login'>
+>>>>>>> 8fa668970663c6acc762069ad1eb85ee330980d6
             <StyledH1>Welcome!</StyledH1>
             <StyledH2>Everything is fine.</StyledH2>
             <br />
@@ -152,11 +168,31 @@ export default withFormik({
         });
     },
       // add axios request link for Jordan's API with handleSubmit
+<<<<<<< HEAD
         
     validationSchema: Yup.object().shape({
         username: Yup.string()
           .required(' * Your email is required to login'),
         password: Yup.string()
+=======
+      validationSchema: Yup.object().shape({
+        username: Yup.string()
+          .required(' * Your User Name is required to login'),
+          password: Yup.string()
+>>>>>>> 8fa668970663c6acc762069ad1eb85ee330980d6
           .required(' * Password is required to login')
-        })
+        }),
+
+        // add axios request link for Jordan's API with handleSubmit
+      handleSubmit() {
+          axios
+            .get(' https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login')
+              .then((response) => {
+                  console.log(response);
+              })
+              .catch((err) => {
+                  console.log('Login Error: ', err);
+                  alert('Login Error: {err.message}')
+              });
+          } 
     })(LoginForm);
