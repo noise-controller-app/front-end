@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Field, withFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import TeacherPage from './TeacherPage';
 
 const StyledForm = styled(Form)`
     color: green;
@@ -17,9 +15,11 @@ const StyledForm = styled(Form)`
     margin: 5em auto;
     border: 3rem solid green;
     min-height: 45vh;
+
     @media only screen and (max-width: 992px) { 
         padding: 1em;
     }
+
 `;
 
 const StyledH1 = styled('h1')`
@@ -28,6 +28,7 @@ const StyledH1 = styled('h1')`
     margin: 0 0.5rem;
     display: flex;
     justify-content: center;
+
     @media only screen and (max-width: 992px) {
         font-size: 2rem;
         margin: 0 auto;
@@ -41,6 +42,7 @@ const StyledH2 = styled('h2')`
     margin: -0.5rem 0.5rem 0 0.5rem;
     display: flex;
     justify-content: center;
+
     @media only screen and (max-width: 992px) {
         display: flex;
         justify-content: center;
@@ -55,6 +57,7 @@ const StyledH3 = styled('h3')`
     font-size: 1.6rem;
     margin-top: 5rem;
     font-weight: 500;
+
     @media only screen and (max-width: 992px) {
         font-size: 1.1rem;
         margin: 0 auto;
@@ -83,25 +86,24 @@ const StyledSubmitButton = styled(Field)`
   color: white;
   background-color: green;
   margin: 0.5rem auto;
+
   @media only screen and (max-width: 992px) {
     width: 60%;
-}
-`;
+}`;
 
-const LoginUrl = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN';
+const LogInUrl = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN';
 
-function LoginForm({ status, touched, errors }){
-    const [ returnUser, setReturnUser ] = useState([
-    //     { name: 'Amber Pittman', email: 'amber@lambdaschool.org' }, 
-    //     { name: 'Cole', email: 'cole@lambdaschool.org' } 
-    ]);
+function LoginForm({status, touched, errors, ...props}){
+    const handleSubmit = (event, values) => {
+        console.log(values);
+        axios.post(LogInUrl, values)
+        .catch((err) => {
+            console.log(err);
+        })
+    }
 
-    useEffect(() => {
-        if (status) setReturnUser((existingUser) => [...existingUser, status])
-    }, [status])
-   
-  return(
-        <StyledForm id='login'>
+    return(
+        <StyledForm id='login' >
             <StyledH1>Welcome!</StyledH1>
             <StyledH2>Everything is fine.</StyledH2>
             <br />
@@ -119,43 +121,42 @@ function LoginForm({ status, touched, errors }){
                 />
             
             <StyledSubmitButton type='submit' 
-                    name='Sign In!' 
-                    placeholder='Sign In'
-                    className='button' 
-                    onClick={ <Redirect to={TeacherPage} /> }
+                    name='Sign In!'
+                    placeholder="Sign In" 
+                    onClick={handleSubmit}
                 />
         </StyledForm>
-  )}
+    )}
 
-
-  export default withFormik({
-      mapPropsToValues: ({ username, password }) => {
-          return {
+export default withFormik({
+    mapPropsToValues: ({ username, password }) => {
+        return {
             username: username || "",
             password: password || ""
-          };
-      },
+        };
+    },
 
-      // add axios request link for Jordan's API with handleSubmit
-      handleSubmit() {
+    handleSubmit(values) {
         axios
-          .get('https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login')
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((err) => {
-                console.log('Login Error: ', err);
-                alert('Login Error: {err.message}')
-            });
-        },
+        .post(
+            "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login",
+            values
+        )
+        .then(response => {
+            return window.location.href = `/teacher/${response.data.teacher.teacher_id}`
+        })
 
-      
-      validationSchema: Yup.object().shape({
-        username: Yup.string()
-          .required(' * Your User Name is required to login'),
-          password: Yup.string()
-          .required(' * Password is required to login')
-        }),
-
+        .catch(err => {
+            console.log("Login Error: ", err);
+            alert("Login Error: {err.message}");
+        });
+    },
+      // add axios request link for Jordan's API with handleSubmit
         
+    validationSchema: Yup.object().shape({
+        username: Yup.string()
+          .required(' * Your email is required to login'),
+        password: Yup.string()
+          .required(' * Password is required to login')
+        })
     })(LoginForm);
