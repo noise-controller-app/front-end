@@ -3,14 +3,12 @@ import { Route, Link } from "react-router-dom";
 import "./App.css";
 import TeacherPage from './components/TeacherPage';
 import Forms from './components/Forms';
-import AnimalScreen from './components/AnimalScreen';
 
 
 function App() {
   const [ second, setSecond ] = useState(0);
   const [ minute, setMinute ] = useState(0);
   const [ isActive, setIsActive ] = useState(true);
-  const [ user, setUser ] = useState(undefined);
 
   // This useEffect works properly. However, we want this to be able to start and stop, not just
   // run when the page starts. I am having a hard time figuring out how to run it through the button.
@@ -51,13 +49,9 @@ function App() {
 
   return (
     <div>
-      {/* {(user === undefined) ? <Forms />
-        : <TeacherPage timer={clock} />
-      } */}
-    
-      <TeacherPage minute={minute} second={second} toggleButton={toggleButton} />
-      <Route path='/teacher/:id' component={TeacherPage} />
-      {/* <Route path='/teacher/:id' component={TeacherPage} /> */}
+      <Route exact path='/' component={Forms} />
+      {/* <TeacherPage minute={minute} second={second} toggleButton={toggleButton} /> */}
+      <Route exact path='/teacher/:id' component={TeacherPage} />
     </div>
   );
 }

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Field, withFormik } from "formik";
 import { Redirect } from 'react-router-dom';
 import * as Yup from "yup";
 import styled from "styled-components";
 import * as axios from "axios";
+import TeacherPage from "./TeacherPage";
 
 const StyledForm = styled(Form)`
     color: green;
@@ -85,6 +86,8 @@ const StyledSubmitButton = styled(Field)`
 const RegisterEndpoint = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/REGISTER ';
 
 function UserForm({ touched, errors }) {
+  const [ user, setUser ] = useState({});
+
   return (
     // Basic form ready to take in a name, email, and password that we will
     // later send to an API in the form fo a POST request.
@@ -93,7 +96,7 @@ function UserForm({ touched, errors }) {
         <StyledH2>Sign up is easy!</StyledH2>
 
         {errors.username && touched.username && <Alert>{errors.username}</Alert>}
-        <StyledField name="username" placeholder="Name" />
+        <StyledField name="username" placeholder="Username" />
 
         {errors.teacher_name && touched.teacher_name && <Alert>{errors.teacher_name}</Alert>}
         <StyledField name="teacher_name" placeholder="What do your kids call you?" />
@@ -135,7 +138,7 @@ export default withFormik({
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   },
 
   // Validation Schema controls what guidelines each input field needs.
