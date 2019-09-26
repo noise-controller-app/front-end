@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form, Field, withFormik } from "formik";
-// import { Redirect } from "react-router-dom";
 import * as Yup from "yup";
 import styled from "styled-components";
 import * as axios from "axios";
-// import TeacherPage from "./TeacherPage";
 
 const StyledForm = styled(Form)`
   color: green;
@@ -86,7 +84,7 @@ const RegisterEndpoint =
   "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/register";
 
 function UserForm({ touched, errors }) {
-  const [user, setUser] = useState({});
+  // const [user, setUser] = useState({});
 
   return (
     // Basic form ready to take in a name, email, and password that we will

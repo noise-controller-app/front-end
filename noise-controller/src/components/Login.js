@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Form, Field, withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
@@ -96,7 +96,7 @@ const LogInUrl =
   "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login";
 
 function LoginForm(props) {
-  const { status, touched, errors } = props;
+  const { touched, errors } = props;
 
   return (
     <StyledForm id="login">

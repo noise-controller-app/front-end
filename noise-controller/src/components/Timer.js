@@ -49,10 +49,10 @@ function Timer({
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [score, setScore] = useState(10);
+  const [score, setScore] = useState(100);
 
   function scoreEmoji() {
-    console.log(score);
+    // console.log(score);
     switch (true) {
       case score > 80:
         return "😃";
@@ -150,7 +150,7 @@ function Timer({
             let volume = (values / length) * sensitivity;
 
             if (volume > 100) {
-              console.log(volume);
+              // console.log(volume);
               microreadings += 1;
               //This is where the hide animal function will go
               if (microreadings > 50) {
