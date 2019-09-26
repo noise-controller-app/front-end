@@ -1,36 +1,22 @@
-import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
-
-//To see what the animal screen looks like so far, render this component to App.js.
-//Just wanted to have something coming on the screen with some basic styled.
+import React, { useState } from "react";
+import styled, { css, keyframes } from "styled-components";
+import Timer from "./Timer";
 
 const Screen = styled.div`
   position: relative;
   height: 80vh;
-  width: 60%;
-  border: 5px solid green;
-  background-color: OldLace;
-  background: url(/assets/forest.png) no-repeat center bottom fixed;
-  background-size: cover;
+  width: 100%;
 `;
 
-const fadeIn = keyframes`
+const fadeIn = homePosition => keyframes`
   0%   {
     opacity: 0;
     font-size: 24rem;
     top: calc(50% - 12rem);
     left: calc(50% - 12rem);
   }
-  100% {
+  50% {
     opacity: 1;
-    font-size: 24rem;
-    top: calc(50% - 12rem);
-    left: calc(50% - 12rem);
-  }
-`;
-
-const slideHome = homePosition => keyframes`
-  0%   {
     font-size: 24rem;
     top: calc(50% - 12rem);
     left: calc(50% - 12rem);
@@ -52,95 +38,91 @@ const bounce = keyframes`
   100% { transform: scale(1,1)      translateY(0); }
 `;
 
+const animateExisting = props =>
+  css`
+    ${bounce} ${2 +
+      Math.random(0.3)}s cubic-bezier(0.28, 0.84, 0.42, 1) 0s infinite;
+  `;
+
+const animateNew = props =>
+  css`
+    ${props => fadeIn(props.homePosition)} 2s ease,
+    ${bounce} 2s cubic-bezier(0.28, 0.84, 0.42, 1) 2s infinite;
+  `;
+
 const StyledEmoji = styled.span`
+  user-select: none;
   position: absolute;
-  animation: ${fadeIn} 2s linear, ${props =>
-  slideHome(
-    props.homePosition
-  )} 1s ease 2s, ${bounce} 2s cubic-bezier(0.280, 0.840, 0.420, 1) 2s infinite;
+  font-size: 15vh;
+  left: ${props => props.homePosition[0]};
+  top: ${props => props.homePosition[1]};
+  animation: ${props => (props.status ? animateNew : animateExisting)};
   animation-fill-mode: forwards;
-  // left: ${props => props.homePosition[0]};
-  // top: ${props => props.homePosition[1]};
-  // font-size: 15vh;
 `;
 
 function AnimalScreen({ mic_sensitivity, animal_change_time }) {
+  const [isActive, setIsActive] = useState(false);
+  const [visible, setVisible] = useState(0);
+
   const [animals, updateAnimals] = useState([
     {
       label: "sheep",
       symbol: "🐑",
-      visible: true,
       homePosition: ["calc(20% - 7.5vh)", "calc(15% - 7.5vh)"]
     },
     {
       label: "mouse",
       symbol: "🐭",
-      visible: true,
       homePosition: ["calc(50% - 7.5vh)", "calc(15% - 7.5vh)"]
     },
     {
       label: "dog",
       symbol: "🐶",
-      visible: true,
       homePosition: ["calc(80% - 7.5vh)", "calc(15% - 7.5vh)"]
     },
     {
       label: "pig face",
       symbol: "🐷",
-      visible: true,
       homePosition: ["calc(20% - 7.5vh)", "calc(37.5% - 7.5vh)"]
     },
-    // {
-    //   label: "snail",
-    //   symbol: "🐌",
-    //   visible: true,
-    // homePosition: [0, 0]
     {
       label: "duck",
       symbol: "🦆",
-      visible: true,
       homePosition: ["calc(50% - 7.5vh)", "calc(37.5% - 7.5vh)"]
     },
     {
       label: "lion",
       symbol: "🦁",
-      visible: true,
       homePosition: ["calc(80% - 7.5vh)", "calc(37.5% - 7.5vh)"]
     },
     {
       label: "bear",
       symbol: "🐻",
-      visible: true,
       homePosition: ["calc(20% - 7.5vh)", "calc(62.5% - 7.5vh)"]
     },
     {
       label: "panda",
       symbol: "🐼",
-      visible: true,
       homePosition: ["calc(50% - 7.5vh)", "calc(62.5% - 7.5vh)"]
     },
     {
       label: "cow",
       symbol: "🐮",
-      visible: true,
       homePosition: ["calc(80% - 7.5vh)", "calc(62.5% - 7.5vh)"]
     },
     {
       label: "tiger",
       symbol: "🐯",
-      visible: true,
       homePosition: ["calc(20% - 7.5vh)", "calc(85% - 7.5vh)"]
     },
     {
       label: "rabbit",
       symbol: "🐰",
-      visible: true,
       homePosition: ["calc(50% - 7.5vh)", "calc(85% - 7.5vh)"]
     },
     {
       label: "unicorn",
       symbol: "🦄",
-      visible: true,
       homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"]
     }
   ]);
@@ -152,25 +134,63 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
       aria-label={props.label ? props.label : ""}
       aria-hidden={props.label ? "false" : "true"}
       homePosition={props.homePosition}
+      status={props.status}
     >
       {props.symbol}
     </StyledEmoji>
   );
 
-  return (
-    <Screen>
-      {console.log(mic_sensitivity, animal_change_time)}
-      {animals
-        .filter(animal => animal.visible)
-        .map((animal, index) => (
+  const Animals = React.memo(props => {
+    if (visible > 1) {
+      const last = visible > animals.length ? animals.length - 1 : visible - 1;
+      return animals
+        .slice(0, visible - 1)
+        .map(animal => (
           <Emoji
-            key={index}
+            key={animal.symbol}
             label={animal.label}
             symbol={animal.symbol}
             homePosition={animal.homePosition}
+            status={false}
           />
-        ))}
-    </Screen>
+        ))
+        .concat(
+          <Emoji
+            key={animals[last].symbol}
+            label={animals[last].label}
+            symbol={animals[last].symbol}
+            homePosition={animals[last].homePosition}
+            status={true}
+          />
+        );
+    } else {
+      return visible === 1 ? (
+        <Emoji
+          key={animals[0].symbol}
+          label={animals[0].label}
+          symbol={animals[0].symbol}
+          homePosition={animals[0].homePosition}
+          status={true}
+        />
+      ) : null;
+    }
+  });
+  console.log(animal_change_time);
+
+  return (
+    <div>
+      <Screen>
+        <Animals />
+        {/* <Timer minutes={minutes} seconds={seconds} toggleButton={toggle} /> */}
+        <Timer
+          isActive={isActive}
+          setIsActive={setIsActive}
+          visible={visible}
+          setVisible={setVisible}
+          animal_change_time={animal_change_time}
+        />
+      </Screen>
+    </div>
   );
 }
 

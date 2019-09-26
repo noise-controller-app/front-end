@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import AnimalScreen from "./AnimalScreen";
-// import Timer from './Timer';
 import styled from "styled-components";
 import axios from "axios";
 
@@ -14,6 +13,16 @@ const TeacherInfo = styled.div`
   width: 25%;
   height: 80vh;
   border: 5px solid blue;
+`;
+
+const AnimalScreenWrapper = styled.div`
+  position: relative;
+  height: 80vh;
+  width: 100%;
+  border: 5px solid green;
+  background-color: OldLace;
+  background: url(/assets/forest.png) no-repeat center bottom fixed;
+  background-size: cover;
 `;
 
 function TeacherPage(props) {
@@ -45,11 +54,12 @@ function TeacherPage(props) {
       )}
 
       {/* This will render the screen that shows animals bouncing around or what ever we decide once we are able to make it work. */}
-      <AnimalScreen
-        mic_sensitivity={user ? user.mic_sensitivity : null}
-        animal_change_time={user ? user.animal_change_time : null}
-      />
-      {/* <Timer minute={props.minute} second={props.minute} toggleButton={props.toggleButton} /> */}
+      <AnimalScreenWrapper>
+        <AnimalScreen
+          mic_sensitivity={user ? user.mic_sensitivity : null}
+          animal_change_time={user ? user.animal_change_time : null}
+        />
+      </AnimalScreenWrapper>
     </Page>
   );
 }
