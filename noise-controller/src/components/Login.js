@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Field, withFormik } from "formik";
+import { withRouter } from "react-router-dom";
 import axios from "axios";
 import * as Yup from "yup";
 import styled from "styled-components";
@@ -94,7 +95,9 @@ const StyledSubmitButton = styled(Field)`
 const LogInUrl =
   "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login";
 
-function LoginForm({ status, touched, errors, ...props }) {
+function LoginForm(props) {
+  const { status, touched, errors } = props;
+
   return (
     <StyledForm id="login">
       <StyledH1>Welcome!</StyledH1>
@@ -113,34 +116,46 @@ function LoginForm({ status, touched, errors, ...props }) {
         type="submit"
         name="Sign In!"
         placeholder="Sign In"
-        // onClick={handleSubmit}
+        // onClick={login}
       />
     </StyledForm>
   );
 }
 
-export default withFormik({
-  mapPropsToValues: ({ username, password, ...props }) => {
-    return {
-      username: username || "",
-      password: password || ""
-    };
-  },
+export default withRouter(
+  withFormik({
+    mapPropsToValues: ({
+      username,
+      password,
+      setSubmitting,
+      setErrors,
+      setStatus,
+      ...props
+    }) => {
+      return {
+        username: username || "",
+        password: password || ""
+      };
+    },
 
-  handleSubmit(values) {
-    axios
-      .post(LogInUrl, values)
-      .then(response => {
-        return (window.location.href = `/teacher/${response.data.teacher.teacher_id}`);
-      })
-      .catch(err => {
-        console.log("Login Error: ", err);
-        alert("Login Error: {err.message}");
-      });
-  },
+    handleSubmit(values, { props }) {
+      // console.log(props.history);
+      axios
+        .post(LogInUrl, values)
+        .then(response => {
+          // return (window.location.href = `/teacher/${response.data.teacher.teacher_id}`);
+          props.history.push(`/teacher/${response.data.teacher.teacher_id}`);
+        })
+        .catch(err => {
+          console.log("Login Error: ", err);
+          alert("Login Error: {err.message}");
+        });
+      return;
+    },
 
-  validationSchema: Yup.object().shape({
-    username: Yup.string().required(" * Your username is required to login"),
-    password: Yup.string().required(" * Password is required to login")
-  })
-})(LoginForm);
+    validationSchema: Yup.object().shape({
+      username: Yup.string().required(" * Your username is required to login"),
+      password: Yup.string().required(" * Password is required to login")
+    })
+  })(LoginForm)
+);
