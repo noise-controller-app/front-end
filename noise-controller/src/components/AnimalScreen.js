@@ -8,6 +8,7 @@ const Screen = styled.div`
   width: 100%;
 `;
 
+// fade animation for new animals
 const fadeIn = homePosition => keyframes`
   0%   {
     opacity: 0;
@@ -28,6 +29,7 @@ const fadeIn = homePosition => keyframes`
   }
 `;
 
+// bounce anim for both new and existing animals
 const bounce = keyframes`
   0%   { transform: scale(1,1)      translateY(0); }
   10%  { transform: scale(1.1,.9)   translateY(0); }
@@ -38,6 +40,7 @@ const bounce = keyframes`
   100% { transform: scale(1,1)      translateY(0); }
 `;
 
+// scatter anim – not fully implemented yet
 const scatter = homePosition => keyframes`
   0%   {
     opacity: 1;
@@ -53,12 +56,16 @@ const scatter = homePosition => keyframes`
   }
 `;
 
+// animation rule for animals already on-screen
 const animateExisting = props =>
   css`
     ${bounce} ${2 +
       Math.random(3)}s cubic-bezier(0.28, 0.84, 0.42, 1) 2s infinite;
   `;
 
+// anim rules for the appearance of new animals
+// they fade in at large size, then shrink as they
+// move to their destination
 const animateNew = props =>
   css`
     ${props => fadeIn(props.homePosition)} 2s ease,
@@ -66,6 +73,7 @@ const animateNew = props =>
     Math.random(3)}s cubic-bezier(0.28, 0.84, 0.42, 1) 2s infinite;
   `;
 
+// styled component for emoji animals
 const StyledEmoji = styled.span`
   user-select: none;
   position: absolute;
@@ -82,11 +90,11 @@ const StyledEmoji = styled.span`
 `;
 
 function AnimalScreen({ mic_sensitivity, animal_change_time }) {
-  const [isActive, setIsActive] = useState(false);
-  const [visible, setVisible] = useState(0);
-  const [scattering, sendEmScattering] = useState(false);
+  const [visible, setVisible] = useState(0); // number of animals currently visible, passed through props to the Timer component for control
+  const [scattering, sendEmScattering] = useState(false); // whether animals should currently be scattering, passed to Timer for control by its integrated microphone functions
 
-  const [animals, updateAnimals] = useState([
+  // animal properties
+  const animals = [
     {
       label: "sheep",
       symbol: "🐑",
@@ -147,8 +155,9 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
       symbol: "🦄",
       homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"]
     }
-  ]);
+  ];
 
+  // animal emoji component
   const Emoji = props => (
     <StyledEmoji
       className="emoji"
@@ -162,7 +171,9 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
     </StyledEmoji>
   );
 
-  const Animals = React.memo(props => {
+  // Build animal emoji components from the array of animals according to number of animals visible.
+  // Designate the most recent animal "new" status in order to trigger the fade in and slide animation
+  const Animals = props => {
     if (visible > 1) {
       const last = visible > animals.length ? animals.length - 1 : visible - 1;
       return animals
@@ -208,16 +219,13 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
           ))
       );
     }
-  });
+  };
 
   return (
     <div>
       <Screen>
         <Animals />
-        {/* <Timer minutes={minutes} seconds={seconds} toggleButton={toggle} /> */}
         <Timer
-          isActive={isActive}
-          setIsActive={setIsActive}
           visible={visible}
           setVisible={setVisible}
           mic_sensitivity={mic_sensitivity}

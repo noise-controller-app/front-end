@@ -39,8 +39,6 @@ const StyledButton = styled.button`
 `;
 
 function Timer({
-  isActive,
-  setIsActive,
   visible,
   setVisible,
   mic_sensitivity,
@@ -50,6 +48,7 @@ function Timer({
 }) {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [isActive, setIsActive] = useState(false);
   const [score, setScore] = useState(100);
 
   function scoreEmoji() {
