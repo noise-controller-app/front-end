@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const TimerDisplay = styled.div`
+  width: 100%;
   font-size: 2.4rem;
   font-weight: 800;
   color: white;
@@ -9,14 +10,32 @@ const TimerDisplay = styled.div`
   position: absolute;
   margin: 1vh 0 0 2vw;
   z-index: 10000;
+  text-align: center;
+`;
+
+const ScoreDisplay = styled.div`
+  width: 100%;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: white;
+  text-shadow: 1px 1px black;
+  position: absolute;
+  bottom: 0;
+  margin: 0 0 1vh 2vw;
+  z-index: 10000;
+  text-align: center;
 `;
 
 const StyledButton = styled.button`
-  box-shadow: 1px 1px black;
-  font-size: 1.6rem;
-  position: absolute;
+  &:focus {
+    outline: none;
+    border: none;
+  }
+  box-shadow: ${props => (props.shh ? "" : "1px 1px black")};
+  font-size: ${props => (props.shh ? "18rem" : "1.6rem")};
   z-index: 10000;
-  background-color: ${props => (props.shh ? "red" : "white")};
+  background: ${props =>
+    props.shh ? "transparent" : "rgba(255,255,255,0.75)"};
 `;
 
 function Timer({
@@ -24,14 +43,38 @@ function Timer({
   setIsActive,
   visible,
   setVisible,
+  mic_sensitivity,
   animal_change_time,
   scattered,
   sendEmScattering
 }) {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [score, setScore] = useState(100);
+
+  function scoreEmoji() {
+    console.log(score);
+    switch (true) {
+      case score > 80:
+        return "😃";
+      case score > 60:
+        return "🙂";
+      case score > 40:
+        return "😐";
+      case score > 20:
+        return "🙁";
+      case score > 0:
+        return "😩";
+      default:
+        return "😞";
+    }
+  }
 
   function toggle() {
+    if (!isActive) {
+      setSeconds(0);
+      setMinutes(0);
+    }
     startMic();
   }
 
@@ -61,14 +104,13 @@ function Timer({
     return () => clearInterval(interval);
   }, [isActive, seconds, minutes, animal_change_time, visible, setVisible]);
 
-  const sensitivity = 2;
+  const sensitivity = mic_sensitivity;
   //2- You can talk next to it
   //4- You can kind of whisper
   //8- your whispering voice should trigger
 
   //Microreadings are each instant it is above the volume threshold. 50 of these fill up the bar, the animal runs away, and the score is subtracted.
   let microreadings = 0;
-  let score = 0;
 
   // Adapted from www.0AV.com, LGPL license or as set by forked host, Travis Holliday
 
@@ -83,7 +125,7 @@ function Timer({
           audio: true
         },
         function(stream) {
-          setIsActive(true);
+          setIsActive(isActive => !isActive);
           let audioContext = new AudioContext();
           let analyser = audioContext.createAnalyser();
           let microphone = audioContext.createMediaStreamSource(stream);
@@ -116,10 +158,8 @@ function Timer({
                 // console.log("Scattered!");
                 sendEmScattering(true);
                 microreadings = 0;
-                score -= 10;
+                setScore(score => (score - 10 ? score - 10 : 0));
                 reset();
-                //This is where you would actually decrease the
-                //score in the state, not here.
                 setTimeout(() => {
                   setIsActive(true);
                   sendEmScattering(false);
@@ -142,14 +182,19 @@ function Timer({
   }
 
   return (
-    <TimerDisplay>
-      Time: {minutes.toString().padStart(2, "0")}:
-      {seconds.toString().padStart(2, "0")}
-      <br />
-      <StyledButton onClick={toggle} shh={scattered}>
-        {isActive ? "Stop" : !scattered ? "Start" : "Too loud. Shhhh...."}
-      </StyledButton>
-    </TimerDisplay>
+    <div>
+      <TimerDisplay>
+        Time: {minutes.toString().padStart(2, "0")}:
+        {seconds.toString().padStart(2, "0")}
+        <br />
+        <StyledButton onClick={toggle} shh={scattered}>
+          {isActive ? "Stop" : !scattered ? "Start" : "🤫"}
+        </StyledButton>
+      </TimerDisplay>
+      <ScoreDisplay>
+        Score: {score} {scoreEmoji()}
+      </ScoreDisplay>
+    </div>
   );
 }
 
