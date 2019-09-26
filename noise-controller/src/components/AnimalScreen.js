@@ -64,7 +64,7 @@ const StyledEmoji = styled.span`
   // font-size: 15vh;
 `;
 
-function AnimalScreen() {
+function AnimalScreen({ mic_sensitivity, animal_change_time }) {
   const [animals, updateAnimals] = useState([
     {
       label: "sheep",
@@ -159,10 +159,12 @@ function AnimalScreen() {
 
   return (
     <Screen>
+      {console.log(mic_sensitivity, animal_change_time)}
       {animals
         .filter(animal => animal.visible)
-        .map(animal => (
+        .map((animal, index) => (
           <Emoji
+            key={index}
             label={animal.label}
             symbol={animal.symbol}
             homePosition={animal.homePosition}

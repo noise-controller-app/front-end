@@ -94,15 +94,13 @@ const StyledSubmitButton = styled(Field)`
 const LogInUrl =
   "https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN";
 
-function LoginForm({ status, touched, errors }) {
-  const [returnUser, setReturnUser] = useState([
-    { name: "Amber Pittman", email: "amber@lambdaschool.org" },
-    { name: "Cole", email: "cole@lambdaschool.org" }
-  ]);
-
-  useEffect(() => {
-    if (status) setReturnUser(existingUser => [...existingUser, status]);
-  }, [status]);
+function LoginForm({ status, touched, errors, ...props }) {
+  const handleSubmit = (event, values) => {
+    console.log(values);
+    axios.post(LogInUrl, values).catch(err => {
+      console.log(err);
+    });
+  };
 
   return (
     <StyledForm id="login">
@@ -118,7 +116,12 @@ function LoginForm({ status, touched, errors }) {
       {errors.password && touched.password && <Alert>{errors.password}</Alert>}
       <StyledField name="password" placeholder="Password" />
 
-      <StyledSubmitButton type="submit" name="Sign In!" placeholder="Sign In" />
+      <StyledSubmitButton
+        type="submit"
+        name="Sign In!"
+        placeholder="Sign In"
+        onClick={handleSubmit}
+      />
     </StyledForm>
   );
 }
@@ -133,33 +136,23 @@ export default withFormik({
 
   handleSubmit(values) {
     axios
-      .post(LogInUrl, values)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  },
-
-  // add axios request link for Jordan's API with handleSubmit
-  validationSchema: Yup.object().shape({
-    username: Yup.string().required(" * Your User Name is required to login"),
-    password: Yup.string().required(" * Password is required to login")
-  }),
-
-  // add axios request link for Jordan's API with handleSubmit
-  handleSubmit() {
-    axios
-      .get(
-        " https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login"
+      .post(
+        "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login",
+        values
       )
       .then(response => {
-        console.log(response);
+        return (window.location.href = `/teacher/${response.data.teacher.teacher_id}`);
       })
+
       .catch(err => {
         console.log("Login Error: ", err);
         alert("Login Error: {err.message}");
       });
-  }
+  },
+  // add axios request link for Jordan's API with handleSubmit
+
+  validationSchema: Yup.object().shape({
+    username: Yup.string().required(" * Your email is required to login"),
+    password: Yup.string().required(" * Password is required to login")
+  })
 })(LoginForm);
