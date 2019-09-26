@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const TimerDisplay = styled.div`
+  width: 100%;
   font-size: 2.4rem;
   font-weight: 800;
   color: white;
@@ -9,9 +10,11 @@ const TimerDisplay = styled.div`
   position: absolute;
   margin: 1vh 0 0 2vw;
   z-index: 10000;
+  text-align: center;
 `;
 
 const ScoreDisplay = styled.div`
+  width: 100%;
   font-size: 2.4rem;
   font-weight: 800;
   color: white;
@@ -20,6 +23,7 @@ const ScoreDisplay = styled.div`
   bottom: 0;
   margin: 0 0 1vh 2vw;
   z-index: 10000;
+  text-align: center;
 `;
 
 const StyledButton = styled.button`
@@ -29,9 +33,9 @@ const StyledButton = styled.button`
   }
   box-shadow: ${props => (props.shh ? "" : "1px 1px black")};
   font-size: ${props => (props.shh ? "18rem" : "1.6rem")};
-  position: absolute;
   z-index: 10000;
-  background: ${props => (props.shh ? "transparent" : "white")};
+  background: ${props =>
+    props.shh ? "transparent" : "rgba(255,255,255,0.75)"};
 `;
 
 function Timer({
@@ -67,6 +71,10 @@ function Timer({
   }
 
   function toggle() {
+    if (!isActive) {
+      setSeconds(0);
+      setMinutes(0);
+    }
     startMic();
   }
 
@@ -117,7 +125,7 @@ function Timer({
           audio: true
         },
         function(stream) {
-          setIsActive(true);
+          setIsActive(isActive => !isActive);
           let audioContext = new AudioContext();
           let analyser = audioContext.createAnalyser();
           let microphone = audioContext.createMediaStreamSource(stream);
