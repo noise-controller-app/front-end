@@ -3,14 +3,17 @@ import styled from "styled-components";
 
 const TimerDisplay = styled.div`
   width: 100%;
-  font-size: 2.4rem;
+  font-size: 2.8rem;
   font-weight: 800;
   color: white;
-  text-shadow: 1px 1px black;
+  filter: drop-shadow(0 0 0.25rem black);
   position: absolute;
-  margin: 1vh 0 0 2vw;
+  bottom: 0;
+  margin-bottom: 15vh;
   z-index: 10000;
   text-align: center;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
 `;
 
 const ScoreDisplay = styled.div`
@@ -18,24 +21,37 @@ const ScoreDisplay = styled.div`
   font-size: 2.4rem;
   font-weight: 800;
   color: white;
-  text-shadow: 1px 1px black;
+  filter: drop-shadow(0 0 0.25rem black);
   position: absolute;
   bottom: 0;
-  margin: 0 0 1vh 2vw;
+  margin-bottom: 1vh;
   z-index: 10000;
   text-align: center;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
 `;
 
 const StyledButton = styled.button`
+  filter: drop-shadow(0 0 0.15rem black);
+  display: block;
+  width: 15vw;
+  min-width: 150px;
+  margin: 2vh auto 0;
+  padding: 10px;
+  border-radius: 15px;
   &:focus {
     outline: none;
     border: none;
   }
-  box-shadow: ${props => (props.shh ? "" : "1px 1px black")};
-  font-size: ${props => (props.shh ? "18rem" : "1.6rem")};
+  font-size: ${props => (props.shh ? "15rem" : "1.6rem")};
   z-index: 10000;
   background: ${props =>
     props.shh ? "transparent" : "rgba(255,255,255,0.75)"};
+  transition: all 1s;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 function Timer({
@@ -183,15 +199,14 @@ function Timer({
   return (
     <div>
       <TimerDisplay>
-        Time: {minutes.toString().padStart(2, "0")}:
+        TIME: {minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}
-        <br />
         <StyledButton onClick={toggle} shh={scattered}>
-          {isActive ? "Stop" : !scattered ? "Start" : "🤫"}
+          {isActive ? "STOP" : !scattered ? "START" : "🤫"}
         </StyledButton>
       </TimerDisplay>
       <ScoreDisplay>
-        Score: {score} {scoreEmoji()}
+        SCORE: {score} {scoreEmoji()}
       </ScoreDisplay>
     </div>
   );

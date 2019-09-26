@@ -4,7 +4,7 @@ import Timer from "./Timer";
 
 const Screen = styled.div`
   position: relative;
-  height: 80vh;
+  height: 100vh;
   width: 100%;
 `;
 
@@ -75,6 +75,8 @@ const animateNew = props =>
 
 // styled component for emoji animals
 const StyledEmoji = styled.span`
+  z-index: 100;
+  filter: drop-shadow(0 0 0.75rem black);
   user-select: none;
   position: absolute;
   font-size: 15vh;
