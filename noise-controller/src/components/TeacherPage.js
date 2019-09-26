@@ -4,22 +4,38 @@ import styled from "styled-components";
 import axios from "axios";
 
 const Page = styled.section`
+  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
-  margin-top: 5vh;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 const TeacherInfo = styled.div`
-  width: 25%;
-  height: 80vh;
-  border: 5px solid blue;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 85px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  font-family: "Lilita One", cursive;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5vw;
+  color: #66cdaa;
+  text-shadow: 1px 1px black;
+  text-align: center;
 `;
 
 const AnimalScreenWrapper = styled.div`
   position: relative;
-  height: 80vh;
-  width: 100%;
-  border: 5px solid green;
+  flex: 1;
   background-color: OldLace;
   background: url(/assets/forest.png) no-repeat center bottom fixed;
   background-size: cover;
@@ -42,8 +58,7 @@ function TeacherPage(props) {
     <Page className="teacher-page-wrapper">
       {user ? (
         <TeacherInfo>
-          Teacher Info:
-          <h3>Alias: {user.teacher_name}</h3>
+          <h3>{user.teacher_name}'s Class</h3>
           {/* // This will add a button to the user profile for each classroom they have that will change to a different classroom.
                 {/* {props.classrooms.map((classroom) => {
                     <button onClick={}>{classroom.name}</button>
@@ -53,7 +68,7 @@ function TeacherPage(props) {
         <h1>Loading...</h1>
       )}
 
-      {/* This will render the screen that shows animals bouncing around or what ever we decide once we are able to make it work. */}
+      {/* This will render the screen that shows animals bouncing around */}
       <AnimalScreenWrapper>
         <AnimalScreen
           mic_sensitivity={user ? user.mic_sensitivity : null}

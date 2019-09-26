@@ -3,14 +3,17 @@ import styled from "styled-components";
 
 const TimerDisplay = styled.div`
   width: 100%;
-  font-size: 2.4rem;
+  font-size: 2.8rem;
   font-weight: 800;
   color: white;
-  text-shadow: 1px 1px black;
+  filter: drop-shadow(0 0 0.25rem black);
   position: absolute;
-  margin: 1vh 0 0 2vw;
+  bottom: 0;
+  margin-bottom: 15vh;
   z-index: 10000;
   text-align: center;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
 `;
 
 const ScoreDisplay = styled.div`
@@ -18,29 +21,40 @@ const ScoreDisplay = styled.div`
   font-size: 2.4rem;
   font-weight: 800;
   color: white;
-  text-shadow: 1px 1px black;
+  filter: drop-shadow(0 0 0.25rem black);
   position: absolute;
   bottom: 0;
-  margin: 0 0 1vh 2vw;
+  margin-bottom: 1vh;
   z-index: 10000;
   text-align: center;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
 `;
 
 const StyledButton = styled.button`
+  filter: drop-shadow(0 0 0.15rem black);
+  display: block;
+  width: 15vw;
+  min-width: 150px;
+  margin: 2vh auto 0;
+  padding: 10px;
+  border-radius: 15px;
   &:focus {
     outline: none;
     border: none;
   }
-  box-shadow: ${props => (props.shh ? "" : "1px 1px black")};
-  font-size: ${props => (props.shh ? "18rem" : "1.6rem")};
+  font-size: ${props => (props.shh ? "15rem" : "1.6rem")};
   z-index: 10000;
   background: ${props =>
     props.shh ? "transparent" : "rgba(255,255,255,0.75)"};
+  transition: all 1s;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 function Timer({
-  isActive,
-  setIsActive,
   visible,
   setVisible,
   mic_sensitivity,
@@ -50,10 +64,11 @@ function Timer({
 }) {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [isActive, setIsActive] = useState(false);
   const [score, setScore] = useState(100);
 
   function scoreEmoji() {
-    console.log(score);
+    // console.log(score);
     switch (true) {
       case score > 80:
         return "😃";
@@ -74,8 +89,8 @@ function Timer({
     if (!isActive) {
       setSeconds(0);
       setMinutes(0);
-    }
-    startMic();
+      startMic();
+    } else reset();
   }
 
   function reset() {
@@ -125,7 +140,7 @@ function Timer({
           audio: true
         },
         function(stream) {
-          setIsActive(isActive => !isActive);
+          setIsActive(true);
           let audioContext = new AudioContext();
           let analyser = audioContext.createAnalyser();
           let microphone = audioContext.createMediaStreamSource(stream);
@@ -151,19 +166,19 @@ function Timer({
             let volume = (values / length) * sensitivity;
 
             if (volume > 100) {
-              console.log(volume);
+              // console.log(volume);
               microreadings += 1;
               //This is where the hide animal function will go
               if (microreadings > 50) {
                 // console.log("Scattered!");
                 sendEmScattering(true);
                 microreadings = 0;
-                setScore(score => (score - 10 ? score - 10 : 0));
+                setScore(score => (score - 10 >= 0 ? score - 10 : 0));
                 reset();
                 setTimeout(() => {
                   setIsActive(true);
                   sendEmScattering(false);
-                }, (seconds % animal_change_time) * 1000 + 6000);
+                }, 6000);
               } else {
                 // sendEmScattering(false);
               }
@@ -184,15 +199,14 @@ function Timer({
   return (
     <div>
       <TimerDisplay>
-        Time: {minutes.toString().padStart(2, "0")}:
+        TIME: {minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}
-        <br />
         <StyledButton onClick={toggle} shh={scattered}>
-          {isActive ? "Stop" : !scattered ? "Start" : "🤫"}
+          {isActive ? "STOP" : !scattered ? "START" : "🤫"}
         </StyledButton>
       </TimerDisplay>
       <ScoreDisplay>
-        Score: {score} {scoreEmoji()}
+        SCORE: {score} {scoreEmoji()}
       </ScoreDisplay>
     </div>
   );

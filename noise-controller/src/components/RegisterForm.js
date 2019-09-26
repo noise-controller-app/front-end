@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form, Field, withFormik } from "formik";
-// import { Redirect } from "react-router-dom";
 import * as Yup from "yup";
 import styled from "styled-components";
 import * as axios from "axios";
-// import TeacherPage from "./TeacherPage";
 
 const StyledForm = styled(Form)`
   color: green;
@@ -86,7 +84,7 @@ const RegisterEndpoint =
   "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/register";
 
 function UserForm({ touched, errors }) {
-  const [user, setUser] = useState({});
+  // const [user, setUser] = useState({});
 
   return (
     // Basic form ready to take in a name, email, and password that we will
@@ -110,10 +108,19 @@ function UserForm({ touched, errors }) {
       <StyledField name="email" placeholder="Email" />
 
       {errors.password && touched.password && <Alert>{errors.password}</Alert>}
-      <StyledField name="password" placeholder="Password" />
+      <StyledField type="password" name="password" placeholder="Password" />
 
-      {/* {errors.classroom && touched.classroom &&<Alert>{errors.classroom}</Alert>}
-        <StyledField name="classroom" placeholder="Classroom Name" /> */}
+      <StyledField
+        type="number"
+        name="mic_sensitivity"
+        placeholder="Microphone sensitivity (Recommended: 1.25 to 3.75)"
+      />
+
+      <StyledField
+        type="number"
+        name="animal_change_time"
+        placeholder="Number of seconds between new animals"
+      />
 
       <StyledSubmitButton type="submit" name="Submit" placeholder="Submit" />
     </StyledForm>
@@ -126,16 +133,16 @@ export default withFormik({
     email,
     teacher_name,
     password,
-    classroom
+    mic_sensitivity,
+    animal_change_time
   }) => {
     return {
       username: username || "",
       email: email || "",
       teacher_name: teacher_name || "",
       password: password || "",
-      mic_sensitivity: 2,
-      animal_change_time: 7
-      // classroom: classroom || '',
+      mic_sensitivity: mic_sensitivity || "",
+      animal_change_time: animal_change_time || ""
     };
   },
 
@@ -148,8 +155,8 @@ export default withFormik({
       .post(RegisterEndpoint, values)
       .then(res => {
         alert("Registered! Please log in now");
-        console.log("Sent!");
-        console.log(res);
+        // console.log("Sent!");
+        // console.log(res);
       })
       .catch(err => {
         console.log(err);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import TeacherPage from "./components/TeacherPage";
@@ -10,7 +10,6 @@ function App() {
       <div>
         <Switch>
           <Route exact path="/" component={Forms} />
-          {/* <TeacherPage minute={minute} second={second} toggleButton={toggleButton} /> */}
           <Route exact path="/teacher/:id" component={TeacherPage} />
         </Switch>
       </div>
