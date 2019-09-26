@@ -38,6 +38,21 @@ const bounce = keyframes`
   100% { transform: scale(1,1)      translateY(0); }
 `;
 
+const scatter = homePosition => keyframes`
+  0%   {
+    opacity: 1;
+    font-size: 15vh;
+    left: ${homePosition[0]};
+    top: ${homePosition[1]};
+  }
+  100% {
+    opacity: 0;
+    font-size: 15vh;
+    left: calc(50% - 15vh);
+    top: -100px;
+  }
+`;
+
 const animateExisting = props =>
   css`
     ${bounce} ${2 +
@@ -56,13 +71,19 @@ const StyledEmoji = styled.span`
   font-size: 15vh;
   left: ${props => props.homePosition[0]};
   top: ${props => props.homePosition[1]};
-  animation: ${props => (props.status ? animateNew : animateExisting)};
+  animation: ${props =>
+    props.status === "scatter"
+      ? scatter
+      : props.status === "new"
+      ? animateNew
+      : animateExisting};
   animation-fill-mode: forwards;
 `;
 
 function AnimalScreen({ mic_sensitivity, animal_change_time }) {
   const [isActive, setIsActive] = useState(false);
   const [visible, setVisible] = useState(0);
+  const [scattering, sendEmScattering] = useState(false);
 
   const [animals, updateAnimals] = useState([
     {
@@ -151,7 +172,7 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
             label={animal.label}
             symbol={animal.symbol}
             homePosition={animal.homePosition}
-            status={false}
+            status={scattering ? "scatter" : "old"}
           />
         ))
         .concat(
@@ -160,7 +181,7 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
             label={animals[last].label}
             symbol={animals[last].symbol}
             homePosition={animals[last].homePosition}
-            status={true}
+            status={scattering ? "scatter" : "new"}
           />
         );
     } else {
@@ -170,13 +191,25 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
           label={animals[0].label}
           symbol={animals[0].symbol}
           homePosition={animals[0].homePosition}
-          status={true}
+          status={scattering ? "scatter" : "new"}
         />
-      ) : null;
+      ) : (
+        animals
+          .slice(0, visible)
+          .map(animal => (
+            <Emoji
+              key={animal.symbol}
+              label={animal.label}
+              symbol={animal.symbol}
+              homePosition={animal.homePosition}
+              status="scatter"
+            />
+          ))
+      );
     }
   });
-  console.log(animal_change_time);
 
+  console.log("Scatter", scattering);
   return (
     <div>
       <Screen>
@@ -188,6 +221,8 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
           visible={visible}
           setVisible={setVisible}
           animal_change_time={animal_change_time}
+          scattered={scattering}
+          sendEmScattering={sendEmScattering}
         />
       </Screen>
     </div>

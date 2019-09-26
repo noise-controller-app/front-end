@@ -36,7 +36,7 @@ function TeacherPage(props) {
       setUser(res.data.teacher);
     }
     fetchData();
-  }, []);
+  }, [props.match.params.id]);
 
   return (
     <Page className="teacher-page-wrapper">
