@@ -13,10 +13,10 @@ const TimerDisplay = styled.div`
 
 const StyledButton = styled.button`
   box-shadow: 1px 1px black;
-  font-size: 1.6rem;
+  font-size: ${props => (props.shh ? "18rem" : "1.6rem")};
   position: absolute;
   z-index: 10000;
-  background-color: ${props => (props.shh ? "red" : "white")};
+  background: white;
 `;
 
 function Timer({
@@ -24,6 +24,7 @@ function Timer({
   setIsActive,
   visible,
   setVisible,
+  mic_sensitivity,
   animal_change_time,
   scattered,
   sendEmScattering
@@ -61,7 +62,7 @@ function Timer({
     return () => clearInterval(interval);
   }, [isActive, seconds, minutes, animal_change_time, visible, setVisible]);
 
-  const sensitivity = 2;
+  const sensitivity = mic_sensitivity;
   //2- You can talk next to it
   //4- You can kind of whisper
   //8- your whispering voice should trigger
@@ -147,7 +148,7 @@ function Timer({
       {seconds.toString().padStart(2, "0")}
       <br />
       <StyledButton onClick={toggle} shh={scattered}>
-        {isActive ? "Stop" : !scattered ? "Start" : "Too loud. Shhhh...."}
+        {isActive ? "Stop" : !scattered ? "Start" : "🤫"}
       </StyledButton>
     </TimerDisplay>
   );
