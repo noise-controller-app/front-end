@@ -56,13 +56,14 @@ const scatter = homePosition => keyframes`
 const animateExisting = props =>
   css`
     ${bounce} ${2 +
-      Math.random(0.3)}s cubic-bezier(0.28, 0.84, 0.42, 1) 0s infinite;
+      Math.random(3)}s cubic-bezier(0.28, 0.84, 0.42, 1) 2s infinite;
   `;
 
 const animateNew = props =>
   css`
     ${props => fadeIn(props.homePosition)} 2s ease,
-    ${bounce} 2s cubic-bezier(0.28, 0.84, 0.42, 1) 2s infinite;
+    ${bounce} ${2 +
+    Math.random(3)}s cubic-bezier(0.28, 0.84, 0.42, 1) 2s infinite;
   `;
 
 const StyledEmoji = styled.span`
@@ -209,7 +210,6 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
     }
   });
 
-  console.log("Scatter", scattering);
   return (
     <div>
       <Screen>

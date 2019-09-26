@@ -92,16 +92,9 @@ const StyledSubmitButton = styled(Field)`
 `;
 
 const LogInUrl =
-  "https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/LOGIN";
+  "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login";
 
 function LoginForm({ status, touched, errors, ...props }) {
-  const handleSubmit = (event, values) => {
-    console.log(values);
-    axios.post(LogInUrl, values).catch(err => {
-      console.log(err);
-    });
-  };
-
   return (
     <StyledForm id="login">
       <StyledH1>Welcome!</StyledH1>
@@ -120,14 +113,14 @@ function LoginForm({ status, touched, errors, ...props }) {
         type="submit"
         name="Sign In!"
         placeholder="Sign In"
-        onClick={handleSubmit}
+        // onClick={handleSubmit}
       />
     </StyledForm>
   );
 }
 
 export default withFormik({
-  mapPropsToValues: ({ username, password }) => {
+  mapPropsToValues: ({ username, password, ...props }) => {
     return {
       username: username || "",
       password: password || ""
@@ -136,23 +129,18 @@ export default withFormik({
 
   handleSubmit(values) {
     axios
-      .post(
-        "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login",
-        values
-      )
+      .post(LogInUrl, values)
       .then(response => {
         return (window.location.href = `/teacher/${response.data.teacher.teacher_id}`);
       })
-
       .catch(err => {
         console.log("Login Error: ", err);
         alert("Login Error: {err.message}");
       });
   },
-  // add axios request link for Jordan's API with handleSubmit
 
   validationSchema: Yup.object().shape({
-    username: Yup.string().required(" * Your email is required to login"),
+    username: Yup.string().required(" * Your username is required to login"),
     password: Yup.string().required(" * Password is required to login")
   })
 })(LoginForm);
