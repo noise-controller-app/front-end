@@ -96,7 +96,7 @@ function UserForm({ touched, errors }) {
         <StyledH2>Sign up is easy!</StyledH2>
 
         {errors.username && touched.username && <Alert>{errors.username}</Alert>}
-        <StyledField name="username" placeholder="Name" />
+        <StyledField name="username" placeholder="Username" />
 
         {errors.teacher_name && touched.teacher_name && <Alert>{errors.teacher_name}</Alert>}
         <StyledField name="teacher_name" placeholder="What do your kids call you?" />
