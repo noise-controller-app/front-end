@@ -49,7 +49,7 @@ function Timer({
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [score, setScore] = useState(100);
+  const [score, setScore] = useState(10);
 
   function scoreEmoji() {
     console.log(score);
@@ -73,8 +73,8 @@ function Timer({
     if (!isActive) {
       setSeconds(0);
       setMinutes(0);
-    }
-    startMic();
+      startMic();
+    } else reset();
   }
 
   function reset() {
@@ -124,7 +124,7 @@ function Timer({
           audio: true
         },
         function(stream) {
-          setIsActive(isActive => !isActive);
+          setIsActive(true);
           let audioContext = new AudioContext();
           let analyser = audioContext.createAnalyser();
           let microphone = audioContext.createMediaStreamSource(stream);
@@ -157,12 +157,12 @@ function Timer({
                 // console.log("Scattered!");
                 sendEmScattering(true);
                 microreadings = 0;
-                setScore(score => (score - 10 ? score - 10 : 0));
+                setScore(score => (score - 10 >= 0 ? score - 10 : 0));
                 reset();
                 setTimeout(() => {
                   setIsActive(true);
                   sendEmScattering(false);
-                }, (seconds % animal_change_time) * 1000 + 6000);
+                }, 6000);
               } else {
                 // sendEmScattering(false);
               }
