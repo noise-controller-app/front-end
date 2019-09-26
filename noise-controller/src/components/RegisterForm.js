@@ -1,61 +1,60 @@
 import React, { useState } from "react";
 import { Form, Field, withFormik } from "formik";
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from "react-router-dom";
 import * as Yup from "yup";
 import styled from "styled-components";
 import * as axios from "axios";
-import TeacherPage from "./TeacherPage";
+// import TeacherPage from "./TeacherPage";
 
 const StyledForm = styled(Form)`
-    color: green;
-    background-color: OldLace;
-    width: 30%;
+  color: green;
+  background-color: OldLace;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 5em auto;
+  border: 3rem solid green;
+  min-height: 45vh;
+
+  @media only screen and (max-width: 992px) {
+    padding: 1em;
+  }
+`;
+
+const StyledH1 = styled("h1")`
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 0 0.5rem;
+  display: flex;
+  justify-content: center;
+
+  @media only screen and (max-width: 992px) {
+    font-size: 2rem;
+    margin: 0 auto;
+    margin-top: 1rem;
+  }
+`;
+
+const StyledH2 = styled("h2")`
+  font-size: 3rem;
+  font-weight: 600;
+  margin: -0.5rem 0.5rem 0 0.5rem;
+  display: flex;
+  justify-content: center;
+
+  @media only screen and (max-width: 992px) {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 5em auto;
-    border: 3rem solid green;
-    min-height: 45vh;
-
-    @media only screen and (max-width: 992px) { 
-        padding: 1em;
-    }
-
+    font-size: 1.6rem;
+    margin: 0 2.5rem;
+    margin-top: 1rem;
+  }
 `;
 
-const StyledH1 = styled('h1')`
-    font-size: 4rem;
-    font-weight: 900;
-    margin: 0 0.5rem;
-    display: flex;
-    justify-content: center;
-
-    @media only screen and (max-width: 992px) {
-        font-size: 2rem;
-        margin: 0 auto;
-        margin-top: 1rem;
-    }
-`;
-
-const StyledH2 = styled('h2')`
-    font-size: 3rem;
-    font-weight: 600;
-    margin: -0.5rem 0.5rem 0 0.5rem;
-    display: flex;
-    justify-content: center;
-
-    @media only screen and (max-width: 992px) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.6rem;
-        margin: 0 2.5rem;
-        margin-top: 1rem;
-    }
-`;
-
-const Alert = styled('p')`
+const Alert = styled("p")`
   min-height: 25px;
   width: 60%;
   color: red;
@@ -80,48 +79,62 @@ const StyledSubmitButton = styled(Field)`
 
   @media only screen and (max-width: 992px) {
     width: 60%;
-}
+  }
 `;
 
-const RegisterEndpoint = 'https://voicecontrollerbackendapi.herokuapp.com/API/TEACHERS/REGISTER ';
+const RegisterEndpoint =
+  "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/register";
 
 function UserForm({ touched, errors }) {
-  const [ user, setUser ] = useState({});
+  const [user, setUser] = useState({});
 
   return (
     // Basic form ready to take in a name, email, and password that we will
     // later send to an API in the form fo a POST request.
-      <StyledForm>
-        <StyledH1>New User?</StyledH1>
-        <StyledH2>Sign up is easy!</StyledH2>
+    <StyledForm>
+      <StyledH1>New User?</StyledH1>
+      <StyledH2>Sign up is easy!</StyledH2>
 
-        {errors.username && touched.username && <Alert>{errors.username}</Alert>}
-        <StyledField name="username" placeholder="Username" />
+      {errors.username && touched.username && <Alert>{errors.username}</Alert>}
+      <StyledField name="username" placeholder="Username" />
 
-        {errors.teacher_name && touched.teacher_name && <Alert>{errors.teacher_name}</Alert>}
-        <StyledField name="teacher_name" placeholder="What do your kids call you?" />
+      {errors.teacher_name && touched.teacher_name && (
+        <Alert>{errors.teacher_name}</Alert>
+      )}
+      <StyledField
+        name="teacher_name"
+        placeholder="What do your kids call you?"
+      />
 
-        {errors.email && touched.email && <Alert>{errors.email}</Alert>}
-        <StyledField name="email" placeholder="Email" />
+      {errors.email && touched.email && <Alert>{errors.email}</Alert>}
+      <StyledField name="email" placeholder="Email" />
 
-        {errors.password && touched.password && <Alert>{errors.password}</Alert>}
-        <StyledField name="password" placeholder="Password" />
+      {errors.password && touched.password && <Alert>{errors.password}</Alert>}
+      <StyledField name="password" placeholder="Password" />
 
-        {/* {errors.classroom && touched.classroom &&<Alert>{errors.classroom}</Alert>}
+      {/* {errors.classroom && touched.classroom &&<Alert>{errors.classroom}</Alert>}
         <StyledField name="classroom" placeholder="Classroom Name" /> */}
 
-        <StyledSubmitButton type="submit" name="Submit" placeholder="Submit" />
-      </StyledForm>
+      <StyledSubmitButton type="submit" name="Submit" placeholder="Submit" />
+    </StyledForm>
   );
 }
 
 export default withFormik({
-  mapPropsToValues: ({ username, email, teacher_name, password, classroom }) => {
+  mapPropsToValues: ({
+    username,
+    email,
+    teacher_name,
+    password,
+    classroom
+  }) => {
     return {
-      username: username || '',
-      email: email || '',
-      teacher_name: teacher_name || '',
-      password: password || ''
+      username: username || "",
+      email: email || "",
+      teacher_name: teacher_name || "",
+      password: password || "",
+      mic_sensitivity: 2,
+      animal_change_time: 7
       // classroom: classroom || '',
     };
   },
@@ -129,14 +142,16 @@ export default withFormik({
   // This will send our UserForm data to the database.
   // Then, it will redirect the user to a page for the Teachers unique user ID.
   // At the time of writing this code, no POST endpoint has been declared.
-  
+
   handleSubmit(values) {
-      axios.post(RegisterEndpoint, values)
-      .then((res) => {
-        console.log('Sent!');
+    axios
+      .post(RegisterEndpoint, values)
+      .then(res => {
+        alert("Registered! Please log in now");
+        console.log("Sent!");
         console.log(res);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   },
@@ -153,10 +168,10 @@ export default withFormik({
       .required(
         "How are we supposed to send you our newsletter without your email?"
       ),
-    teacher_name: Yup.string().required('Alias required.'),
+    teacher_name: Yup.string().required("Alias required."),
     password: Yup.string()
       .min(7)
-      .required("Password required."),
+      .required("Password required.")
     // classroom: Yup.string().required(
     //   "C'mon, you're a teacher... You don't have a classroom?"
     // )
