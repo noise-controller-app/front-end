@@ -5,16 +5,18 @@ import styled from "styled-components";
 import * as axios from "axios";
 
 const StyledForm = styled(Form)`
-  color: green;
-  background-color: OldLace;
-  width: 30%;
+  color: blue;
+  background-color: rgba(255,255,255,.5);
+  width: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 5em auto;
-  border: 3rem solid green;
+  border: 1rem solid blue;
   min-height: 45vh;
+  border-radius:100px;
+  padding:10px;
 
   @media only screen and (max-width: 992px) {
     padding: 1em;
@@ -61,18 +63,22 @@ const Alert = styled("p")`
 `;
 
 const StyledField = styled(Field)`
-  height: 1.3rem;
+  height: 2rem;
   width: 60%;
-  border: 2px solid green;
+  border: 2px solid blue;
   margin: 1rem auto;
+  padding:5px;
+  font-size: 1rem;
+  border-radius:10px;
 `;
 
 const StyledSubmitButton = styled(Field)`
-  height: 1.3rem;
+  height: 2rem;
   width: 30%;
   border: 2px solid black;
   color: white;
-  background-color: green;
+  font-size:1rem;
+  background-color: blue;
   margin: 0.5rem auto;
 
   @media only screen and (max-width: 992px) {
@@ -110,18 +116,6 @@ function UserForm({ touched, errors }) {
       {errors.password && touched.password && <Alert>{errors.password}</Alert>}
       <StyledField type="password" name="password" placeholder="Password" />
 
-      <StyledField
-        type="number"
-        name="mic_sensitivity"
-        placeholder="Microphone sensitivity (Recommended: 1.25 to 3.75)"
-      />
-
-      <StyledField
-        type="number"
-        name="animal_change_time"
-        placeholder="Number of seconds between new animals"
-      />
-
       <StyledSubmitButton type="submit" name="Submit" placeholder="Submit" />
     </StyledForm>
   );
@@ -132,17 +126,13 @@ export default withFormik({
     username,
     email,
     teacher_name,
-    password,
-    mic_sensitivity,
-    animal_change_time
+    password
   }) => {
     return {
       username: username || "",
       email: email || "",
       teacher_name: teacher_name || "",
-      password: password || "",
-      mic_sensitivity: mic_sensitivity || "",
-      animal_change_time: animal_change_time || ""
+      password: password || ""
     };
   },
 
