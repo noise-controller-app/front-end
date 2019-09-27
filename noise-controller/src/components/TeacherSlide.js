@@ -122,7 +122,7 @@ class TeacherSlide extends React.Component {
           { this.state.showSlide ? <div style={{padding:"20px"}}>
             <br />
             <TeacherForm teacher={user} />
-            <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="300px"/>
+            <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="300px" data-pin-nopin="true" />
             <br />Reset Year <span style={{cursor:"pointer"}} onClick={this.resetYear}>(!)</span><br />
             <span style={{cursor:"pointer"}} onClick={this.logout}>Logout</span>
           </div> : ""}
