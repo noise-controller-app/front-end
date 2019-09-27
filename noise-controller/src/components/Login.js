@@ -6,16 +6,18 @@ import * as Yup from "yup";
 import styled from "styled-components";
 
 const StyledForm = styled(Form)`
-  color: green;
-  background-color: OldLace;
-  width: 30%;
+  color: blue;
+  background-color: rgba(255,255,255,.8);
+  width: auto;
+  border-radius:10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 5em auto;
-  border: 3rem solid green;
+  border: 1rem solid blue;
   min-height: 45vh;
+  padding:10px;
 
   @media only screen and (max-width: 992px) {
     padding: 1em;
@@ -73,18 +75,22 @@ const Alert = styled("p")`
 `;
 
 const StyledField = styled(Field)`
-  height: 1.3rem;
+  height: 2rem;
   width: 60%;
-  border: 2px solid green;
+  border: 2px solid blue;
   margin: 1rem auto;
+  padding:5px;
+  font-size: 1rem;
+  border-radius:10px;
 `;
 
 const StyledSubmitButton = styled(Field)`
-  height: 1.3rem;
+  height: 2rem;
+  font-size: 1rem;
   width: 30%;
   border: 2px solid black;
   color: white;
-  background-color: green;
+  background-color: blue;
   margin: 0.5rem auto;
 
   @media only screen and (max-width: 992px) {
@@ -100,10 +106,10 @@ function LoginForm(props) {
 
   return (
     <StyledForm id="login">
-      <StyledH1>Welcome!</StyledH1>
-      <StyledH2>Everything is fine.</StyledH2>
-      <br />
-      <StyledH3>Please sign in</StyledH3>
+
+      <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="300px"/>
+
+      <StyledH3>If you already have a profile, please sign in</StyledH3>
       <br />
 
       {errors.username && touched.username && <Alert>{errors.username}</Alert>}

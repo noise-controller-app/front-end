@@ -1,6 +1,9 @@
 import React from 'react'
-
+import axios from 'axios'
 import styled from "styled-components";
+import TeacherForm from './TeacherForm';
+import { withRouter } from 'react-router-dom'
+
 
 
 const TeacherInfo = styled.div`
@@ -11,10 +14,10 @@ const TeacherInfo = styled.div`
   width: 100%;
   position: fixed;
   top: 0;
-  z-index: 50;
+  padding:30px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   font-size: 1.8rem;
   font-family: "Lilita One", cursive;
   font-weight: 800;
@@ -24,7 +27,7 @@ const TeacherInfo = styled.div`
   text-shadow: 1px 1px black;
   text-align: center;
 
-  z-index:10;
+  z-index:1000;
 `;
 
 class TeacherSlide extends React.Component {
@@ -36,28 +39,97 @@ class TeacherSlide extends React.Component {
         }
     }
 
-    toggleSlide = (e) => {
-      this.setState({showSlide: !this.state.showSlide})
+    reset = async () => {
+      const updated = await this.props.refresh()
+      this.setState({showSlide: !this.state.showSlide, user: updated})
+
+    }
+
+    toggleSlide = async (e) => {
+      await this.reset();
+    }
+
+    averageScore = () => {
+      const user = this.state.user
+      let totalScore = 0
+      const amountScores = user.scores.length
+      user.scores.map(score => totalScore += score.score_value)
+      return totalScore / amountScores
+    }
+
+    currentStreak = () => {
+      const user = this.state.user
+      const scores = user.scores
+      let counter = 0
+      let streak = true
+      scores.forEach(item => {
+        if(streak){
+          if(item.score_value === 100){
+            counter += 1
+          }else {
+            streak = false
+          }
+        }
+      })
+      return counter
+    }
+
+    handleDelete = async (e) => {
+      if(window.confirm("Are you sure you wish to permanently delete this score?")){
+        const headers = { headers: {'Authorization': localStorage.token} }
+        const res = await axios.delete(`https://voicecontrollerbackendapi.herokuapp.com/api/scores/${e.target.attributes.score.value}`, headers)
+        console.log(res)
+      }
+    }
+
+    resetYear = async (e) => {
+      if (window.confirm("*WARNING* Are you sure you wish to permanently delete ALL of your scores?")){
+        const headers = { headers: {'Authorization': localStorage.token} }
+        const res = await axios.delete(`https://voicecontrollerbackendapi.herokuapp.com/api/scores/reset`, headers)
+        console.log(res)
+      }
+    }
+
+    logout = (e) => {
+      if(window.confirm("Are you sure you want to logout?")){
+        localStorage.setItem('token', null)
+        this.props.history.push(`/`);
+      }
     }
 
     render(){
       const user = this.state.user
+      const scores = user.scores.reverse()
       return user ? <TeacherInfo>
 
-          {this.state.showSlide ? <div>
-          <h3>This Weeks Scores:</h3>
+          {this.state.showSlide ? <div style={{padding:"20px"}}>
+          <h3><span style={{textDecoration:"underline"}}>Past Scores:</span></h3>
           {
-            user.scores.reverse().splice(0, 5).map(score =>
-              <p>{score.score_value}</p>
+            [...scores].splice(0,5).map(score =>
+              <p>-{score.score_value} <span onClick={this.handleDelete} score={score.score_id}  style={{cursor:"pointer"}}>(x)</span></p>
              )
           }
+          <span style={{textDecoration:"underline"}}>Times Played</span><br /> {user.scores.length}<br />
+          <span style={{textDecoration:"underline"}}>Streak</span><br />  {this.currentStreak()}<br />
+          <span style={{textDecoration:"underline"}}>Average</span><br /> {this.averageScore() ? Math.ceil(this.averageScore()) : "0"} Points<br />
+          <br />
 
 
-          <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" /><br />
           </div> : "" }
-          <h1>{user.teacher_name}{"'s"} Class</h1>
+          <div>
+          <h1 style={{margin:"0",textDecoration:"underline"}}>{user.teacher_name}{"'s"} Class</h1>
 
-          <span onClick={this.toggleSlide} > { this.state.showSlide ? "Hide ^" : "Show" } </span>
+          { this.state.showSlide ? <div style={{padding:"20px"}}>
+            <br />
+            <TeacherForm teacher={user} />
+            <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="400px"/>
+            <br />Reset Year <span style={{cursor:"pointer"}} onClick={this.resetYear}>(!)</span><br />
+            <span style={{cursor:"pointer"}} onClick={this.logout}>Logout</span>
+          </div> : ""}
+          </div>
+
+          <div onClick={this.toggleSlide} style={{position:"absolute", textAlign:"right", right:"0", cursor:"pointer"}}> { this.state.showSlide ? "X" : "Show" } </div>
+
         </TeacherInfo> : ""
     }
 
@@ -65,4 +137,4 @@ class TeacherSlide extends React.Component {
 }
 
 
-export default TeacherSlide
+export default withRouter(TeacherSlide)

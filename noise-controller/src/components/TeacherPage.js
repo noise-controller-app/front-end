@@ -26,6 +26,19 @@ const AnimalScreenWrapper = styled.div`
 function TeacherPage(props) {
   const [user, setUser] = useState(null);
 
+  const headers = { headers: {'Authorization': localStorage.token} }
+
+  const refresh = async () => {
+
+    const res = await axios.get(
+      `https://voicecontrollerbackendapi.herokuapp.com/api/teachers/${props.match.params.id}`, headers
+    )
+    
+    const updated = {...res.data.teacher, scores: res.data.scores}
+    setUser(updated)
+    return updated
+  }
+
   useEffect(() => {
     async function fetchData() {
       const headers = { headers: {'Authorization': localStorage.token} }
@@ -40,7 +53,7 @@ function TeacherPage(props) {
   return (
     <Page className="teacher-page-wrapper">
       {user ? (
-        <TeacherSlide user={user} />
+        <TeacherSlide refresh={refresh} user={user} />
       ) : (
         <h1>Loading...</h1>
       )}
@@ -48,7 +61,7 @@ function TeacherPage(props) {
       {/* This will render the screen that shows animals bouncing around */}
       <AnimalScreenWrapper>
         <AnimalScreen
-          mic_sensitivity={user ? user.mic_sensitivity : null}
+          micSensitivity={user ? user.mic_sensitivity : null}
           animal_change_time={user ? user.animal_change_time : null}
         />
       </AnimalScreenWrapper>
