@@ -2,6 +2,8 @@ import React from 'react'
 import axios from 'axios'
 import styled from "styled-components";
 import TeacherForm from './TeacherForm';
+import { withRouter } from 'react-router-dom'
+
 
 
 const TeacherInfo = styled.div`
@@ -88,6 +90,13 @@ class TeacherSlide extends React.Component {
       }
     }
 
+    logout = (e) => {
+      if(window.confirm("Are you sure you want to logout?")){
+        localStorage.setItem('token', null)
+        this.props.history.push(`/`);
+      }
+    }
+
     render(){
       const user = this.state.user
       const scores = user.scores.reverse()
@@ -114,7 +123,8 @@ class TeacherSlide extends React.Component {
             <br />
             <TeacherForm teacher={user} />
             <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="400px"/>
-            <br />Reset Year <span style={{cursor:"pointer"}} onClick={this.resetYear}>(!)</span>
+            <br />Reset Year <span style={{cursor:"pointer"}} onClick={this.resetYear}>(!)</span><br />
+            <span style={{cursor:"pointer"}} onClick={this.logout}>Logout</span>
           </div> : ""}
           </div>
 
@@ -127,4 +137,4 @@ class TeacherSlide extends React.Component {
 }
 
 
-export default TeacherSlide
+export default withRouter(TeacherSlide)
