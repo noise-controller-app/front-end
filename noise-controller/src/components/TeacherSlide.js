@@ -37,9 +37,14 @@ class TeacherSlide extends React.Component {
         }
     }
 
-    toggleSlide = async (e) => {
+    reset = async () => {
       const updated = await this.props.refresh()
       this.setState({showSlide: !this.state.showSlide, user: updated})
+
+    }
+
+    toggleSlide = async (e) => {
+      await this.reset();
     }
 
     averageScore = () => {
@@ -65,7 +70,22 @@ class TeacherSlide extends React.Component {
         }
       })
       return counter
+    }
 
+    handleDelete = async (e) => {
+      if(window.confirm("Are you sure you wish to permanently delete this score?")){
+        const headers = { headers: {'Authorization': localStorage.token} }
+        const res = await axios.delete(`https://voicecontrollerbackendapi.herokuapp.com/api/scores/${e.target.attributes.score.value}`, headers)
+        console.log(res)
+      }
+    }
+
+    resetYear = async (e) => {
+      if (window.confirm("*WARNING* Are you sure you wish to permanently delete ALL of your scores?")){
+        const headers = { headers: {'Authorization': localStorage.token} }
+        const res = await axios.delete(`https://voicecontrollerbackendapi.herokuapp.com/api/scores/reset`, headers)
+        console.log(res)
+      }
     }
 
     render(){
@@ -73,29 +93,33 @@ class TeacherSlide extends React.Component {
       const scores = user.scores.reverse()
       return user ? <TeacherInfo>
 
-          {this.state.showSlide ? <div>
-          <h3>Past (5) Scores:</h3>
+          {this.state.showSlide ? <div style={{padding:"20px"}}>
+          <h3><span style={{textDecoration:"underline"}}>Past Scores:</span></h3>
           {
             [...scores].splice(0,5).map(score =>
-              <p>-{score.score_value}</p>
+              <p>-{score.score_value} <span onClick={this.handleDelete} score={score.score_id}>(x)</span></p>
              )
           }
-          Times Played<br /> {user.scores.length}<br />
-          Perfect Streak<br />  {this.currentStreak()}<br />
-          Average Score<br /> {Math.ceil(this.averageScore())} Points<br />
+          <span style={{textDecoration:"underline"}}>Times Played</span><br /> {user.scores.length}<br />
+          <span style={{textDecoration:"underline"}}>Streak</span><br />  {this.currentStreak()}<br />
+          <span style={{textDecoration:"underline"}}>Average</span><br /> {this.averageScore() ? Math.ceil(this.averageScore()) : "0"} Points<br />
+          <br />
 
 
           </div> : "" }
           <div>
-          <h1 style={{margin:"0"}}>{user.teacher_name}{"'s"} Class</h1>
+          <h1 style={{margin:"0",textDecoration:"underline"}}>{user.teacher_name}{"'s"} Class</h1>
 
-          { this.state.showSlide ? <div>
+          { this.state.showSlide ? <div style={{padding:"20px"}}>
+            <br />
             <TeacherForm teacher={user} />
-            <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="400px"/></div> : ""}
-
+            <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="400px"/>
+            <br />Reset Year <span onClick={this.resetYear}>(!)</span>
+          </div> : ""}
           </div>
 
-          <span onClick={this.toggleSlide} > { this.state.showSlide ? "Hide ^" : "Show" } </span>
+          <div onClick={this.toggleSlide} style={{position:"absolute", textAlign:"right", right:"0"}}> { this.state.showSlide ? "X" : "Show" } </div>
+
         </TeacherInfo> : ""
     }
 
