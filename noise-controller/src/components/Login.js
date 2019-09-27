@@ -107,7 +107,9 @@ function LoginForm(props) {
   return (
     <StyledForm id="login">
 
-      <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="300px"/>
+      <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" 
+           height="300px"
+           data-pin-nopin="true"/>
 
       <StyledH3>If you already have a profile, please sign in</StyledH3>
       <br />
