@@ -227,6 +227,7 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
     <div>
       <Screen>
         <Animals />
+
         <Timer
           visible={visible}
           setVisible={setVisible}

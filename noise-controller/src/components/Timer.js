@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from 'axios'
 
 const TimerDisplay = styled.div`
   width: 100%;
@@ -10,11 +11,42 @@ const TimerDisplay = styled.div`
   position: absolute;
   bottom: 0;
   margin-bottom: 15vh;
-  z-index: 10000;
+  z-index: 9;
   text-align: center;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
 `;
+
+const VolumeDisplay = styled.div`
+  width: 100%;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: white;
+  filter: drop-shadow(0 0 0.25rem black);
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 15vh;
+  z-index: 5;
+  text-align: left;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+`;
+
+const MeterDisplay = styled.div`
+  width: 100%;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: white;
+  filter: drop-shadow(0 0 0.25rem black);
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 15vh;
+  z-index: 5;
+  text-align: right;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+`;
+
 
 const ScoreDisplay = styled.div`
   width: 100%;
@@ -66,6 +98,9 @@ function Timer({
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [score, setScore] = useState(100);
+  const [scoreObject, setScoreObject] = useState({});
+  const [volumeReading, setVolumeReading] = useState(0);
+  const [meterProgress, setMeterProgress] = useState(0);
 
   function scoreEmoji() {
     // console.log(score);
@@ -90,13 +125,29 @@ function Timer({
       setSeconds(0);
       setMinutes(0);
       startMic();
-    } else reset();
+      axios.post('https://voicecontrollerbackendapi.herokuapp.com/api/scores/start', {}, { headers: {'Authorization': localStorage.token} })
+      .then(response => {
+        setScoreObject(response.data)
+      })
+      .catch()
+    } else {
+      reset();
+      window.localStream.getTracks().forEach(track => track.stop())
+      scoreObject.score_value = score
+      axios.put('https://voicecontrollerbackendapi.herokuapp.com/api/scores/end', scoreObject, { headers: {'Authorization': localStorage.token} })
+      .then(response => {
+        setScoreObject({})
+        setScore(100)
+      })
+
+    }
   }
 
   function reset() {
     setVisible(0);
     setIsActive(false);
     setSeconds(0);
+    setMeterProgress(0);
   }
 
   useEffect(() => {
@@ -141,6 +192,7 @@ function Timer({
         },
         function(stream) {
           setIsActive(true);
+          window.localStream = stream
           let audioContext = new AudioContext();
           let analyser = audioContext.createAnalyser();
           let microphone = audioContext.createMediaStreamSource(stream);
@@ -164,10 +216,11 @@ function Timer({
             }
 
             let volume = (values / length) * sensitivity;
-
+            setVolumeReading(volume)
             if (volume > 100) {
               // console.log(volume);
               microreadings += 1;
+              setMeterProgress(microreadings)
               //This is where the hide animal function will go
               if (microreadings > 50) {
                 // console.log("Scattered!");
@@ -205,6 +258,18 @@ function Timer({
           {isActive ? "STOP" : !scattered ? "START" : "🤫"}
         </StyledButton>
       </TimerDisplay>
+      <VolumeDisplay>
+        <div style={{float:"left",height:"510px", border: "2px solid black", width:"50px", marginLeft:"50px",position:"relative", overflow:"hidden"}}>
+          <div style={{height:`${volumeReading*5+10}px`,backgroundColor:`${volumeReading > 100 ? "red" : "green"}`}}></div>
+        </div>
+      </VolumeDisplay>
+
+
+      <MeterDisplay>
+        <div style={{height:"510px", border: "2px solid black", width:"50px", float:"right", marginRight:"50px",position:"relative"}}>
+      <div style={{height:`${meterProgress*10+10}px`,width:"50px",backgroundColor:`${meterProgress > 40 ? "red" : "yellow"}` }}></div>
+      </div>
+      </MeterDisplay>
       <ScoreDisplay>
         SCORE: {score} {scoreEmoji()}
       </ScoreDisplay>
