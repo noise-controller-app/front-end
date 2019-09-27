@@ -91,72 +91,72 @@ const StyledEmoji = styled.span`
   animation-fill-mode: forwards;
 `;
 
-function AnimalScreen({ mic_sensitivity, animal_change_time }) {
+function AnimalScreen({ micSensitivity, animal_change_time }) {
   const [visible, setVisible] = useState(0); // number of animals currently visible, passed through props to the Timer component for control
   const [scattering, sendEmScattering] = useState(false); // whether animals should currently be scattering, passed to Timer for control by its integrated microphone functions
 
-  // animal properties
+  // animal properties, 15, 37.5
   const animals = [
     {
       label: "sheep",
       symbol: "🐑",
-      homePosition: ["calc(20% - 7.5vh)", "calc(15% - 7.5vh)"]
+      homePosition: ["calc(20% - 7.5vh)", "calc(30% - 7.5vh)"]
     },
     {
       label: "mouse",
       symbol: "🐭",
-      homePosition: ["calc(50% - 7.5vh)", "calc(15% - 7.5vh)"]
+      homePosition: ["calc(50% - 7.5vh)", "calc(30% - 7.5vh)"]
     },
     {
       label: "dog",
       symbol: "🐶",
-      homePosition: ["calc(80% - 7.5vh)", "calc(15% - 7.5vh)"]
+      homePosition: ["calc(80% - 7.5vh)", "calc(30% - 7.5vh)"]
     },
     {
       label: "pig face",
       symbol: "🐷",
-      homePosition: ["calc(20% - 7.5vh)", "calc(37.5% - 7.5vh)"]
+      homePosition: ["calc(20% - 7.5vh)", "calc(55% - 7.5vh)"]
     },
     {
       label: "duck",
       symbol: "🦆",
-      homePosition: ["calc(50% - 7.5vh)", "calc(37.5% - 7.5vh)"]
+      homePosition: ["calc(50% - 7.5vh)", "calc(55% - 7.5vh)"]
     },
     {
       label: "lion",
       symbol: "🦁",
-      homePosition: ["calc(80% - 7.5vh)", "calc(37.5% - 7.5vh)"]
+      homePosition: ["calc(80% - 7.5vh)", "calc(55% - 7.5vh)"]
     },
-    {
-      label: "bear",
-      symbol: "🐻",
-      homePosition: ["calc(20% - 7.5vh)", "calc(62.5% - 7.5vh)"]
-    },
-    {
-      label: "panda",
-      symbol: "🐼",
-      homePosition: ["calc(50% - 7.5vh)", "calc(62.5% - 7.5vh)"]
-    },
-    {
-      label: "cow",
-      symbol: "🐮",
-      homePosition: ["calc(80% - 7.5vh)", "calc(62.5% - 7.5vh)"]
-    },
-    {
-      label: "tiger",
-      symbol: "🐯",
-      homePosition: ["calc(20% - 7.5vh)", "calc(85% - 7.5vh)"]
-    },
-    {
-      label: "rabbit",
-      symbol: "🐰",
-      homePosition: ["calc(50% - 7.5vh)", "calc(85% - 7.5vh)"]
-    },
-    {
-      label: "unicorn",
-      symbol: "🦄",
-      homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"]
-    }
+    // {
+    //   label: "bear",
+    //   symbol: "🐻",
+    //   homePosition: ["calc(20% - 7.5vh)", "calc(62.5% - 7.5vh)"]
+    // },
+    // {
+    //   label: "panda",
+    //   symbol: "🐼",
+    //   homePosition: ["calc(50% - 7.5vh)", "calc(62.5% - 7.5vh)"]
+    // },
+    // {
+    //   label: "cow",
+    //   symbol: "🐮",
+    //   homePosition: ["calc(80% - 7.5vh)", "calc(62.5% - 7.5vh)"]
+    // },
+    // {
+    //   label: "tiger",
+    //   symbol: "🐯",
+    //   homePosition: ["calc(20% - 7.5vh)", "calc(85% - 7.5vh)"]
+    // },
+    // {
+    //   label: "rabbit",
+    //   symbol: "🐰",
+    //   homePosition: ["calc(50% - 7.5vh)", "calc(85% - 7.5vh)"]
+    // },
+    // {
+    //   label: "unicorn",
+    //   symbol: "🦄",
+    //   homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"]
+    // }
   ];
 
   // animal emoji component
@@ -231,7 +231,7 @@ function AnimalScreen({ mic_sensitivity, animal_change_time }) {
         <Timer
           visible={visible}
           setVisible={setVisible}
-          mic_sensitivity={mic_sensitivity}
+          micSensitivity={micSensitivity}
           animal_change_time={animal_change_time}
           scattered={scattering}
           sendEmScattering={sendEmScattering}

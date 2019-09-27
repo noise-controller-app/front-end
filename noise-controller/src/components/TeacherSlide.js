@@ -1,6 +1,7 @@
 import React from 'react'
-
+import axios from 'axios'
 import styled from "styled-components";
+import TeacherForm from './TeacherForm';
 
 
 const TeacherInfo = styled.div`
@@ -11,10 +12,10 @@ const TeacherInfo = styled.div`
   width: 100%;
   position: fixed;
   top: 0;
-  z-index: 50;
+  padding:30px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   font-size: 1.8rem;
   font-family: "Lilita One", cursive;
   font-weight: 800;
@@ -24,7 +25,7 @@ const TeacherInfo = styled.div`
   text-shadow: 1px 1px black;
   text-align: center;
 
-  z-index:10;
+  z-index:1000;
 `;
 
 class TeacherSlide extends React.Component {
@@ -36,26 +37,63 @@ class TeacherSlide extends React.Component {
         }
     }
 
-    toggleSlide = (e) => {
-      this.setState({showSlide: !this.state.showSlide})
+    toggleSlide = async (e) => {
+      const updated = await this.props.refresh()
+      this.setState({showSlide: !this.state.showSlide, user: updated})
+    }
+
+    averageScore = () => {
+      const user = this.state.user
+      let totalScore = 0
+      const amountScores = user.scores.length
+      user.scores.map(score => totalScore += score.score_value)
+      return totalScore / amountScores
+    }
+
+    currentStreak = () => {
+      const user = this.state.user
+      const scores = user.scores
+      let counter = 0
+      let streak = true
+      scores.forEach(item => {
+        if(streak){
+          if(item.score_value === 100){
+            counter += 1
+          }else {
+            streak = false
+          }
+        }
+      })
+      return counter
+
     }
 
     render(){
       const user = this.state.user
+      const scores = user.scores.reverse()
       return user ? <TeacherInfo>
 
           {this.state.showSlide ? <div>
-          <h3>This Weeks Scores:</h3>
+          <h3>Past (5) Scores:</h3>
           {
-            user.scores.reverse().splice(0, 5).map(score =>
-              <p>{score.score_value}</p>
+            [...scores].splice(0,5).map(score =>
+              <p>-{score.score_value}</p>
              )
           }
+          Times Played<br /> {user.scores.length}<br />
+          Perfect Streak<br />  {this.currentStreak()}<br />
+          Average Score<br /> {Math.ceil(this.averageScore())} Points<br />
 
 
-          <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" /><br />
           </div> : "" }
-          <h1>{user.teacher_name}{"'s"} Class</h1>
+          <div>
+          <h1 style={{margin:"0"}}>{user.teacher_name}{"'s"} Class</h1>
+
+          { this.state.showSlide ? <div>
+            <TeacherForm teacher={user} />
+            <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="400px"/></div> : ""}
+
+          </div>
 
           <span onClick={this.toggleSlide} > { this.state.showSlide ? "Hide ^" : "Show" } </span>
         </TeacherInfo> : ""

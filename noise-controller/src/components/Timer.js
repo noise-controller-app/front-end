@@ -57,7 +57,7 @@ const ScoreDisplay = styled.div`
   position: absolute;
   bottom: 0;
   margin-bottom: 1vh;
-  z-index: 10000;
+  z-index: 100;
   text-align: center;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
@@ -89,7 +89,7 @@ const StyledButton = styled.button`
 function Timer({
   visible,
   setVisible,
-  mic_sensitivity,
+  micSensitivity,
   animal_change_time,
   scattered,
   sendEmScattering
@@ -155,7 +155,7 @@ function Timer({
     if (isActive) {
       interval = setInterval(() => {
         if (seconds > 1 && !((seconds + 1) % animal_change_time)) {
-          if (visible < 12) setVisible(visible => visible + 1);
+          if (visible < 6) setVisible(visible => visible + 1);
         }
         if (seconds >= 59) {
           setMinutes(minutes => minutes + 1);
@@ -170,7 +170,8 @@ function Timer({
     return () => clearInterval(interval);
   }, [isActive, seconds, minutes, animal_change_time, visible, setVisible]);
 
-  const sensitivity = mic_sensitivity;
+  const sensitivity = micSensitivity;
+  console.log(sensitivity)
   //2- You can talk next to it
   //4- You can kind of whisper
   //8- your whispering voice should trigger
@@ -259,15 +260,15 @@ function Timer({
         </StyledButton>
       </TimerDisplay>
       <VolumeDisplay>
-        <div style={{float:"left",height:"510px", border: "2px solid black", width:"50px", marginLeft:"50px",position:"relative", overflow:"hidden"}}>
-          <div style={{height:`${volumeReading*5+10}px`,backgroundColor:`${volumeReading > 100 ? "red" : "green"}`}}></div>
+        <div style={{float:"left",height:"410px", border: "2px solid black", width:"50px", marginLeft:"50px",position:"relative", overflow:"hidden"}}>
+          <div style={{height:`${volumeReading*4+10}px`,backgroundColor:`${volumeReading > 100 ? "red" : "green"}`}}></div>
         </div>
       </VolumeDisplay>
 
 
       <MeterDisplay>
-        <div style={{height:"510px", border: "2px solid black", width:"50px", float:"right", marginRight:"50px",position:"relative"}}>
-      <div style={{height:`${meterProgress*10+10}px`,width:"50px",backgroundColor:`${meterProgress > 40 ? "red" : "yellow"}` }}></div>
+        <div style={{height:"410px", border: "2px solid black", width:"50px", float:"right", marginRight:"50px",position:"relative"}}>
+      <div style={{height:`${meterProgress*8+10}px`,width:"50px",backgroundColor:`${meterProgress > 40 ? "red" : "yellow"}` }}></div>
       </div>
       </MeterDisplay>
       <ScoreDisplay>
