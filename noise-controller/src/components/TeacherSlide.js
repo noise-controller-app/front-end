@@ -97,7 +97,7 @@ class TeacherSlide extends React.Component {
           <h3><span style={{textDecoration:"underline"}}>Past Scores:</span></h3>
           {
             [...scores].splice(0,5).map(score =>
-              <p>-{score.score_value} <span onClick={this.handleDelete} score={score.score_id}>(x)</span></p>
+              <p>-{score.score_value} <span onClick={this.handleDelete} score={score.score_id}  style={{cursor:"pointer"}}>(x)</span></p>
              )
           }
           <span style={{textDecoration:"underline"}}>Times Played</span><br /> {user.scores.length}<br />
@@ -114,11 +114,11 @@ class TeacherSlide extends React.Component {
             <br />
             <TeacherForm teacher={user} />
             <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" height="400px"/>
-            <br />Reset Year <span onClick={this.resetYear}>(!)</span>
+            <br />Reset Year <span style={{cursor:"pointer"}} onClick={this.resetYear}>(!)</span>
           </div> : ""}
           </div>
 
-          <div onClick={this.toggleSlide} style={{position:"absolute", textAlign:"right", right:"0"}}> { this.state.showSlide ? "X" : "Show" } </div>
+          <div onClick={this.toggleSlide} style={{position:"absolute", textAlign:"right", right:"0", cursor:"pointer"}}> { this.state.showSlide ? "X" : "Show" } </div>
 
         </TeacherInfo> : ""
     }

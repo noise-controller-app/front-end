@@ -255,7 +255,7 @@ function Timer({
       <TimerDisplay>
         TIME: {minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}
-        <StyledButton onClick={toggle} shh={scattered}>
+        <StyledButton onClick={toggle} style={{cursor:"pointer"}}  shh={scattered}>
           {isActive ? "STOP" : !scattered ? "START" : "🤫"}
         </StyledButton>
       </TimerDisplay>
