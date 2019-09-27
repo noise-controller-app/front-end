@@ -143,6 +143,7 @@ export default withRouter(
       axios
         .post(LogInUrl, values)
         .then(response => {
+          localStorage.setItem('token', response.data.token)
           // return (window.location.href = `/teacher/${response.data.teacher.teacher_id}`);
           props.history.push(`/teacher/${response.data.teacher.teacher_id}`);
         })
