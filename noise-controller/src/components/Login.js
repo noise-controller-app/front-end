@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Form, Field, withFormik } from "formik";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
@@ -96,7 +96,7 @@ const LogInUrl =
   "https://voicecontrollerbackendapi.herokuapp.com/api/teachers/login";
 
 function LoginForm(props) {
-  const { status, touched, errors } = props;
+  const { touched, errors } = props;
 
   return (
     <StyledForm id="login">
@@ -110,7 +110,7 @@ function LoginForm(props) {
       <StyledField name="username" placeholder="Username" />
 
       {errors.password && touched.password && <Alert>{errors.password}</Alert>}
-      <StyledField name="password" placeholder="Password" />
+      <StyledField type="password" name="password" placeholder="Password" />
 
       <StyledSubmitButton
         type="submit"
