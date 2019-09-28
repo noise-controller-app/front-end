@@ -33,7 +33,7 @@ function TeacherPage(props) {
     const res = await axios.get(
       `https://voicecontrollerbackendapi.herokuapp.com/api/teachers/${props.match.params.id}`, headers
     )
-    
+
     const updated = {...res.data.teacher, scores: res.data.scores}
     setUser(updated)
     return updated
@@ -61,8 +61,8 @@ function TeacherPage(props) {
       {/* This will render the screen that shows animals bouncing around */}
       <AnimalScreenWrapper>
         <AnimalScreen
-          micSensitivity={user ? user.mic_sensitivity : null}
-          animal_change_time={user ? user.animal_change_time : null}
+          micSensitivity={user ? user.mic_sensitivity : 5}
+          animalChangeTime={user ? user.animal_change_time : 5}
         />
       </AnimalScreenWrapper>
     </Page>
