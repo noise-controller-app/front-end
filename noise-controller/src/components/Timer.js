@@ -90,7 +90,7 @@ function Timer({
   visible,
   setVisible,
   micSensitivity,
-  animal_change_time,
+  animalChangeTime,
   scattered,
   sendEmScattering
 }) {
@@ -154,7 +154,7 @@ function Timer({
     let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        if (seconds > 1 && !((seconds + 1) % animal_change_time)) {
+        if (seconds > 1 && !((seconds + 1) % animalChangeTime)) {
           if (visible < 6) setVisible(visible => visible + 1);
         }
         if (seconds >= 59) {
@@ -168,7 +168,7 @@ function Timer({
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [isActive, seconds, minutes, animal_change_time, visible, setVisible]);
+  }, [isActive, seconds, minutes, animalChangeTime, visible, setVisible]);
 
   const sensitivity = micSensitivity;
   console.log(sensitivity)

@@ -91,7 +91,7 @@ const StyledEmoji = styled.span`
   animation-fill-mode: forwards;
 `;
 
-function AnimalScreen({ micSensitivity, animal_change_time }) {
+function AnimalScreen({ micSensitivity, animalChangeTime }) {
   const [visible, setVisible] = useState(0); // number of animals currently visible, passed through props to the Timer component for control
   const [scattering, sendEmScattering] = useState(false); // whether animals should currently be scattering, passed to Timer for control by its integrated microphone functions
 
@@ -232,7 +232,7 @@ function AnimalScreen({ micSensitivity, animal_change_time }) {
           visible={visible}
           setVisible={setVisible}
           micSensitivity={micSensitivity}
-          animal_change_time={animal_change_time}
+          animalChangeTime={animalChangeTime}
           scattered={scattering}
           sendEmScattering={sendEmScattering}
         />

@@ -142,7 +142,7 @@ export default withFormik({
 
   handleSubmit(values) {
     axios
-      .post(RegisterEndpoint, values)
+      .post(RegisterEndpoint, {...values, mic_sensitivity: 5, animal_change_time: 5})
       .then(res => {
         alert("Registered! Please log in now");
         // console.log("Sent!");
