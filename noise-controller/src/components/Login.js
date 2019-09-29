@@ -7,9 +7,9 @@ import styled from "styled-components";
 
 const StyledForm = styled(Form)`
   color: blue;
-  background-color: rgba(255,255,255,.8);
+  background-color: rgba(255, 255, 255, 0.8);
   width: auto;
-  border-radius:10px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -17,41 +17,10 @@ const StyledForm = styled(Form)`
   margin: 5em auto;
   border: 1rem solid blue;
   min-height: 45vh;
-  padding:10px;
+  padding: 10px;
 
   @media only screen and (max-width: 992px) {
     padding: 1em;
-  }
-`;
-
-const StyledH1 = styled("h1")`
-  font-size: 4rem;
-  font-weight: 900;
-  margin: 0 0.5rem;
-  display: flex;
-  justify-content: center;
-
-  @media only screen and (max-width: 992px) {
-    font-size: 2rem;
-    margin: 0 auto;
-    margin-top: 1rem;
-  }
-`;
-
-const StyledH2 = styled("h2")`
-  font-size: 3rem;
-  font-weight: 600;
-  margin: -0.5rem 0.5rem 0 0.5rem;
-  display: flex;
-  justify-content: center;
-
-  @media only screen and (max-width: 992px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.6rem;
-    margin: 0 2.5rem;
-    margin-top: 1rem;
   }
 `;
 
@@ -79,9 +48,9 @@ const StyledField = styled(Field)`
   width: 60%;
   border: 2px solid blue;
   margin: 1rem auto;
-  padding:5px;
+  padding: 5px;
   font-size: 1rem;
-  border-radius:10px;
+  border-radius: 10px;
 `;
 
 const StyledSubmitButton = styled(Field)`
@@ -106,10 +75,12 @@ function LoginForm(props) {
 
   return (
     <StyledForm id="login">
-
-      <img src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537" 
-           height="300px"
-           data-pin-nopin="true"/>
+      <img
+        src="https://www.freelogodesign.org/file/app/client/thumb/c306569e-6f69-46fc-b170-b46ad0cde7cd_200x200.png?1569527074537"
+        height="300px"
+        data-pin-nopin="true"
+        alt="Quiet Time logo"
+      />
 
       <StyledH3>If you already have a profile, please sign in</StyledH3>
       <br />
@@ -151,7 +122,7 @@ export default withRouter(
       axios
         .post(LogInUrl, values)
         .then(response => {
-          localStorage.setItem('token', response.data.token)
+          localStorage.setItem("token", response.data.token);
           // return (window.location.href = `/teacher/${response.data.teacher.teacher_id}`);
           props.history.push(`/teacher/${response.data.teacher.teacher_id}`);
         })

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
 import Timer from "./Timer";
 
@@ -56,6 +56,11 @@ const scatter = homePosition => keyframes`
   }
 `;
 
+const animateScatter = props =>
+  css`
+    ${props => scatter(props.homePosition)} 1s ease;
+  `;
+
 // animation rule for animals already on-screen
 const animateExisting = props =>
   css`
@@ -84,11 +89,12 @@ const StyledEmoji = styled.span`
   top: ${props => props.homePosition[1]};
   animation: ${props =>
     props.status === "scatter"
-      ? scatter
+      ? animateScatter
       : props.status === "new"
       ? animateNew
       : animateExisting};
   animation-fill-mode: forwards;
+  visibility: ${props => props.visible};
 `;
 
 function AnimalScreen({ micSensitivity, animalChangeTime }) {
@@ -96,68 +102,107 @@ function AnimalScreen({ micSensitivity, animalChangeTime }) {
   const [scattering, sendEmScattering] = useState(false); // whether animals should currently be scattering, passed to Timer for control by its integrated microphone functions
 
   // animal properties, 15, 37.5
-  const animals = [
+  const [animals, setAnimals] = useState([
     {
       label: "sheep",
       symbol: "🐑",
-      homePosition: ["calc(20% - 7.5vh)", "calc(30% - 7.5vh)"]
+      homePosition: ["calc(20% - 7.5vh)", "calc(30% - 7.5vh)"],
+      status: "old",
+      visibility: "hidden"
     },
     {
       label: "mouse",
       symbol: "🐭",
-      homePosition: ["calc(50% - 7.5vh)", "calc(30% - 7.5vh)"]
+      homePosition: ["calc(50% - 7.5vh)", "calc(30% - 7.5vh)"],
+      status: "old",
+      visibility: "hidden"
     },
     {
       label: "dog",
       symbol: "🐶",
-      homePosition: ["calc(80% - 7.5vh)", "calc(30% - 7.5vh)"]
+      homePosition: ["calc(80% - 7.5vh)", "calc(30% - 7.5vh)"],
+      status: "old",
+      visibility: "hidden"
     },
     {
       label: "pig face",
       symbol: "🐷",
-      homePosition: ["calc(20% - 7.5vh)", "calc(55% - 7.5vh)"]
+      homePosition: ["calc(20% - 7.5vh)", "calc(55% - 7.5vh)"],
+      status: "old",
+      visibility: "hidden"
     },
     {
       label: "duck",
       symbol: "🦆",
-      homePosition: ["calc(50% - 7.5vh)", "calc(55% - 7.5vh)"]
+      homePosition: ["calc(50% - 7.5vh)", "calc(55% - 7.5vh)"],
+      status: "old",
+      visibility: "hidden"
     },
     {
       label: "lion",
       symbol: "🦁",
-      homePosition: ["calc(80% - 7.5vh)", "calc(55% - 7.5vh)"]
-    },
+      homePosition: ["calc(80% - 7.5vh)", "calc(55% - 7.5vh)"],
+      status: "old",
+      visibility: "hidden"
+    }
     // {
     //   label: "bear",
     //   symbol: "🐻",
-    //   homePosition: ["calc(20% - 7.5vh)", "calc(62.5% - 7.5vh)"]
+    //   homePosition: ["calc(20% - 7.5vh)", "calc(62.5% - 7.5vh)"],
+    //   status: "old",
+    //   visibility: "hidden"
     // },
     // {
     //   label: "panda",
     //   symbol: "🐼",
-    //   homePosition: ["calc(50% - 7.5vh)", "calc(62.5% - 7.5vh)"]
+    //   homePosition: ["calc(50% - 7.5vh)", "calc(62.5% - 7.5vh)"],
+    //   status: "old",
+    //   visibility: "hidden"
     // },
     // {
     //   label: "cow",
     //   symbol: "🐮",
-    //   homePosition: ["calc(80% - 7.5vh)", "calc(62.5% - 7.5vh)"]
+    //   homePosition: ["calc(80% - 7.5vh)", "calc(62.5% - 7.5vh)"],
+    //   status: "old",
+    //   visibility: "hidden"
     // },
     // {
     //   label: "tiger",
     //   symbol: "🐯",
-    //   homePosition: ["calc(20% - 7.5vh)", "calc(85% - 7.5vh)"]
+    //   homePosition: ["calc(20% - 7.5vh)", "calc(85% - 7.5vh)"],
+    //   status: "old",
+    //   visibility: "hidden"
     // },
     // {
     //   label: "rabbit",
     //   symbol: "🐰",
-    //   homePosition: ["calc(50% - 7.5vh)", "calc(85% - 7.5vh)"]
+    //   homePosition: ["calc(50% - 7.5vh)", "calc(85% - 7.5vh)"],
+    //   status: "old",
+    //   visibility: "hidden"
     // },
     // {
     //   label: "unicorn",
     //   symbol: "🦄",
-    //   homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"]
+    //   homePosition: ["calc(80% - 7.5vh)", "calc(85% - 7.5vh)"],
+    //   status: "old",
+    //   visibility: "hidden"
     // }
-  ];
+  ]);
+
+  useEffect(() => {
+    setAnimals(animals =>
+      animals.map((animal, index) => {
+        if (!scattering) {
+          animal.status = index < visible ? "old" : "new";
+          if (index === visible - 1) animal.status = "new";
+        } else {
+          animal.status = "scatter";
+        }
+        animal.visibility = index < visible ? "visible" : "hidden";
+        return animal;
+      })
+    );
+  }, [visible, scattering, setAnimals]);
 
   // animal emoji component
   const Emoji = props => (
@@ -165,9 +210,10 @@ function AnimalScreen({ micSensitivity, animalChangeTime }) {
       className="emoji"
       role="img"
       aria-label={props.label ? props.label : ""}
-      aria-hidden={props.label ? "false" : "true"}
+      aria-hidden={props.visibility === "hidden" ? "true" : "false"}
       homePosition={props.homePosition}
       status={props.status}
+      visible={props.visibility}
     >
       {props.symbol}
     </StyledEmoji>
@@ -176,51 +222,16 @@ function AnimalScreen({ micSensitivity, animalChangeTime }) {
   // Build animal emoji components from the array of animals according to number of animals visible.
   // Designate the most recent animal "new" status in order to trigger the fade in and slide animation
   const Animals = props => {
-    if (visible > 1) {
-      const last = visible > animals.length ? animals.length - 1 : visible - 1;
-      return animals
-        .slice(0, visible - 1)
-        .map(animal => (
-          <Emoji
-            key={animal.symbol}
-            label={animal.label}
-            symbol={animal.symbol}
-            homePosition={animal.homePosition}
-            status={scattering ? "scatter" : "old"}
-          />
-        ))
-        .concat(
-          <Emoji
-            key={animals[last].symbol}
-            label={animals[last].label}
-            symbol={animals[last].symbol}
-            homePosition={animals[last].homePosition}
-            status={scattering ? "scatter" : "new"}
-          />
-        );
-    } else {
-      return visible === 1 ? (
-        <Emoji
-          key={animals[0].symbol}
-          label={animals[0].label}
-          symbol={animals[0].symbol}
-          homePosition={animals[0].homePosition}
-          status={scattering ? "scatter" : "new"}
-        />
-      ) : (
-        animals
-          .slice(0, visible)
-          .map(animal => (
-            <Emoji
-              key={animal.symbol}
-              label={animal.label}
-              symbol={animal.symbol}
-              homePosition={animal.homePosition}
-              status="scatter"
-            />
-          ))
-      );
-    }
+    return animals.map(animal => (
+      <Emoji
+        key={animal.symbol}
+        label={animal.label}
+        symbol={animal.symbol}
+        homePosition={animal.homePosition}
+        status={animal.status}
+        visibility={animal.visibility}
+      />
+    ));
   };
 
   return (
