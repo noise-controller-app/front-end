@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from 'axios'
+import axios from "axios";
 
 const TimerDisplay = styled.div`
   width: 100%;
@@ -46,7 +46,6 @@ const MeterDisplay = styled.div`
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
 `;
-
 
 const ScoreDisplay = styled.div`
   width: 100%;
@@ -125,26 +124,34 @@ function Timer({
       setSeconds(0);
       setMinutes(0);
       startMic();
-      axios.post('https://voicecontrollerbackendapi.herokuapp.com/api/scores/start', {}, { headers: {'Authorization': localStorage.token} })
-      .then(response => {
-        setScoreObject(response.data)
-      })
-      .catch()
+      axios
+        .post(
+          "https://voicecontrollerbackendapi.herokuapp.com/api/scores/start",
+          {},
+          { headers: { Authorization: localStorage.token } }
+        )
+        .then(response => {
+          setScoreObject(response.data);
+        })
+        .catch();
     } else {
       reset();
-      window.localStream.getTracks().forEach(track => track.stop())
-      scoreObject.score_value = score
-      axios.put('https://voicecontrollerbackendapi.herokuapp.com/api/scores/end', scoreObject, { headers: {'Authorization': localStorage.token} })
-      .then(response => {
-        setScoreObject({})
-        setScore(100)
-      })
-
+      window.localStream.getTracks().forEach(track => track.stop());
+      scoreObject.score_value = score;
+      axios
+        .put(
+          "https://voicecontrollerbackendapi.herokuapp.com/api/scores/end",
+          scoreObject,
+          { headers: { Authorization: localStorage.token } }
+        )
+        .then(response => {
+          setScoreObject({});
+          setScore(100);
+        });
     }
   }
 
   function reset() {
-    setVisible(0);
     setIsActive(false);
     setSeconds(0);
     setMeterProgress(0);
@@ -171,7 +178,6 @@ function Timer({
   }, [isActive, seconds, minutes, animalChangeTime, visible, setVisible]);
 
   const sensitivity = micSensitivity;
-  console.log(sensitivity)
   //2- You can talk next to it
   //4- You can kind of whisper
   //8- your whispering voice should trigger
@@ -193,7 +199,7 @@ function Timer({
         },
         function(stream) {
           setIsActive(true);
-          window.localStream = stream
+          window.localStream = stream;
           let audioContext = new AudioContext();
           let analyser = audioContext.createAnalyser();
           let microphone = audioContext.createMediaStreamSource(stream);
@@ -217,24 +223,21 @@ function Timer({
             }
 
             let volume = (values / length) * sensitivity;
-            setVolumeReading(volume)
+            setVolumeReading(volume);
             if (volume > 100) {
-              // console.log(volume);
               microreadings += 1;
-              setMeterProgress(microreadings)
+              setMeterProgress(microreadings);
               //This is where the hide animal function will go
               if (microreadings > 50) {
-                // console.log("Scattered!");
                 sendEmScattering(true);
                 microreadings = 0;
                 setScore(score => (score - 10 >= 0 ? score - 10 : 0));
                 reset();
                 setTimeout(() => {
-                  setIsActive(true);
+                  setVisible(0);
                   sendEmScattering(false);
+                  setIsActive(true);
                 }, 6000);
-              } else {
-                // sendEmScattering(false);
               }
             } else {
               //This is where the show animal function will go
@@ -255,21 +258,54 @@ function Timer({
       <TimerDisplay>
         TIME: {minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}
-        <StyledButton onClick={toggle} style={{cursor:"pointer"}}  shh={scattered}>
+        <StyledButton
+          onClick={toggle}
+          style={{ cursor: "pointer" }}
+          shh={scattered}
+        >
           {isActive ? "STOP" : !scattered ? "START" : "🤫"}
         </StyledButton>
       </TimerDisplay>
       <VolumeDisplay>
-        <div style={{float:"left",height:"410px", border: "2px solid black", width:"50px", marginLeft:"50px",position:"relative", overflow:"hidden"}}>
-          <div style={{height:`${volumeReading*4+10}px`,backgroundColor:`${volumeReading > 100 ? "red" : "green"}`}}></div>
+        <div
+          style={{
+            float: "left",
+            height: "410px",
+            border: "2px solid black",
+            width: "50px",
+            marginLeft: "50px",
+            position: "relative",
+            overflow: "hidden"
+          }}
+        >
+          <div
+            style={{
+              height: `${volumeReading * 4 + 10}px`,
+              backgroundColor: `${volumeReading > 100 ? "red" : "green"}`
+            }}
+          ></div>
         </div>
       </VolumeDisplay>
 
-
       <MeterDisplay>
-        <div style={{height:"410px", border: "2px solid black", width:"50px", float:"right", marginRight:"50px",position:"relative"}}>
-      <div style={{height:`${meterProgress*8+10}px`,width:"50px",backgroundColor:`${meterProgress > 40 ? "red" : "yellow"}` }}></div>
-      </div>
+        <div
+          style={{
+            height: "410px",
+            border: "2px solid black",
+            width: "50px",
+            float: "right",
+            marginRight: "50px",
+            position: "relative"
+          }}
+        >
+          <div
+            style={{
+              height: `${meterProgress * 8 + 10}px`,
+              width: "50px",
+              backgroundColor: `${meterProgress > 40 ? "red" : "yellow"}`
+            }}
+          ></div>
+        </div>
       </MeterDisplay>
       <ScoreDisplay>
         SCORE: {score} {scoreEmoji()}
