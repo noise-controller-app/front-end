@@ -63,6 +63,7 @@ const ScoreDisplay = styled.div`
 `;
 
 const StyledButton = styled.button`
+  user-select: none;
   filter: drop-shadow(0 0 0.15rem black);
   display: block;
   width: 15vw;
@@ -72,12 +73,12 @@ const StyledButton = styled.button`
   border-radius: 15px;
   &:focus {
     outline: none;
-    border: none;
   }
   font-size: ${props => (props.shh ? "15rem" : "1.6rem")};
   z-index: 10000;
   background: ${props =>
     props.shh ? "transparent" : "rgba(255,255,255,0.75)"};
+  border: ${props => (props.shh ? "0" : "")};
   transition: all 1s;
   font-weight: 800;
   display: flex;
