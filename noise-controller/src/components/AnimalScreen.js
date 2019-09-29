@@ -193,8 +193,8 @@ function AnimalScreen({ micSensitivity, animalChangeTime }) {
     setAnimals(animals =>
       animals.map((animal, index) => {
         if (!scattering) {
-          animal.status = index < visible ? "old" : "new";
-          if (index === visible - 1) animal.status = "new";
+          animal.status =
+            index < visible - 1 ? "old" : index === visible - 1 ? "new" : "old";
         } else {
           animal.status = "scatter";
         }
