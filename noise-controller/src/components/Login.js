@@ -8,7 +8,7 @@ import styled from "styled-components";
 const StyledForm = styled(Form)`
   color: blue;
   background-color: rgba(255, 255, 255, 0.8);
-  width: 45%;
+  width: auto;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
