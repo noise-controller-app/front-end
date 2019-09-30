@@ -8,7 +8,7 @@ import styled from "styled-components";
 const StyledForm = styled(Form)`
   color: blue;
   background-color: rgba(255, 255, 255, 0.8);
-  width: 45%;
+  width: auto;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@ const StyledForm = styled(Form)`
   margin: 5em auto;
   border: 1rem solid #fe9a4d;
   min-height: 45vh;
-  padding: 10px;
+  padding: 1.2em;
 
   @media only screen and (max-width: 992px) {
     padding: 1em;
