@@ -13,9 +13,9 @@ const StyledForm = styled(Form)`
   justify-content: center;
   align-items: center;
   margin: 5em auto;
-  border: 1rem solid blue;
+  border: 1rem solid #fe9a4d;
   min-height: 45vh;
-  border-radius:100px;
+  border-radius: 100px;
   padding:10px;
 
   @media only screen and (max-width: 992px) {
@@ -29,6 +29,7 @@ const StyledH1 = styled("h1")`
   margin: 0 0.5rem;
   display: flex;
   justify-content: center;
+  color: rgb(71,103,142);
 
   @media only screen and (max-width: 992px) {
     font-size: 2rem;
@@ -43,6 +44,7 @@ const StyledH2 = styled("h2")`
   margin: -0.5rem 0.5rem 0 0.5rem;
   display: flex;
   justify-content: center;
+  color: rgb(71,103,142);
 
   @media only screen and (max-width: 992px) {
     display: flex;
@@ -65,7 +67,7 @@ const Alert = styled("p")`
 const StyledField = styled(Field)`
   height: 2rem;
   width: 60%;
-  border: 2px solid blue;
+  border: 2px solid #fe9a4d;
   margin: 1rem auto;
   padding:5px;
   font-size: 1rem;
@@ -75,10 +77,10 @@ const StyledField = styled(Field)`
 const StyledSubmitButton = styled(Field)`
   height: 2rem;
   width: 30%;
-  border: 2px solid black;
+  border: 2px solid #8c8c8c;
   color: white;
   font-size:1rem;
-  background-color: blue;
+  background-color: #fe9a4d;
   margin: 0.5rem auto;
 
   @media only screen and (max-width: 992px) {
